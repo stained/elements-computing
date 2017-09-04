@@ -1,6 +1,18 @@
 import os
 from MemoryAccess import MemoryAccess
 from Arithmetic import Arithmetic
+from FlowControl import FlowControl
+
+
+# remove any comments and additional white space
+def clean_command(command):
+    # check for comments
+    position = command.find("//")
+
+    if position > -1:
+        command = command[:position]
+
+    return command.strip()
 
 
 class Parser:
@@ -9,7 +21,8 @@ class Parser:
     commandMap = {"push": MemoryAccess, "pop": MemoryAccess,                            # memory
                   "add": Arithmetic, "sub": Arithmetic, "neg": Arithmetic,              # arithmetic
                   "eq": Arithmetic, "gt": Arithmetic, "lt": Arithmetic,
-                  "and": Arithmetic, "or": Arithmetic, "not": Arithmetic
+                  "and": Arithmetic, "or": Arithmetic, "not": Arithmetic,
+                  "label": FlowControl, "if_goto": FlowControl, "goto": FlowControl     # flow control
                   }
 
     def __init__(self, vmFilePath):
@@ -17,6 +30,7 @@ class Parser:
         self.filePath, self.fileName = os.path.split(vmFilePath)
         self.vmName, self.fileExtension = os.path.splitext(self.fileName)
         self.lineNumber = 0
+        self.currentFunction = None
 
     def parse(self):
         self.lineNumber = 0
@@ -30,14 +44,19 @@ class Parser:
                 # strip whitespace and check for comment
                 line = line.strip()
                 if line and not line.startswith("//"):
+                    # remove comments
+                    line = clean_command(line)
+
                     # real command, so split into components
                     commandLine = line.split(" ")
 
                     # call relevant command function in appropriate class
-                    commandClass = Parser.commandMap[commandLine[0]]
                     command = commandLine.pop(0)
+                    command = command.replace("-", "_")
+                    commandClass = Parser.commandMap[command]
 
                     if commandClass is not None:
+                        # replace dash with underscore for function names
                         asmOutput = None
 
                         try:

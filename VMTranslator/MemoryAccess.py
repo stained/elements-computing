@@ -137,6 +137,11 @@ class MemoryAccess:
             code += "\t@" + parser.vmName + "." + index + "\n" + \
                     "\tM=D\n"
         else:
-            print("segment " + segment + " not implemented")
+            # decrement stack pointer
+            code += MemoryAccess.decrement_stack_pointer()
+
+            # get value into D from stack
+            code += "\tA=M\n" + \
+                    "\tD=M\n"
 
         return code

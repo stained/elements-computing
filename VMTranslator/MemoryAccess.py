@@ -49,12 +49,6 @@ class MemoryAccess:
 
             code += MemoryAccess.push_to_stack_and_increment()
 
-        elif segment == "constant":
-            # get value at segment memory location into D register
-            code += "\t@" + index + "\n" + \
-                    "\tD=A\n"
-
-            code += MemoryAccess.push_to_stack_and_increment()
         elif segment == "temp":
             # load from index 5
             code += "\t@" + str(int(index) + 5) + "\n" + \
@@ -72,8 +66,18 @@ class MemoryAccess:
                     "\tD=M\n"
 
             code += MemoryAccess.push_to_stack_and_increment()
+        elif segment == "memory":
+            # load mem value at index
+            code += "\t@" + index + "\n" + \
+                    "\tD=M\n"
+
+            code += MemoryAccess.push_to_stack_and_increment()
         else:
-            print("segment " + segment + " not implemented")
+            # load index into D -- constant
+            code += "\t@" + index + "\n" + \
+                    "\tD=A\n"
+
+            code += MemoryAccess.push_to_stack_and_increment()
 
         return code
 
@@ -89,7 +93,7 @@ class MemoryAccess:
             # A contains pointer to memory location segment + i
             code += "\t@" + MemoryAccess.segmentRegisterMap[segment] + "\n" + \
                     "\tD=D+M\n" + \
-                    "\t@R13\n" + \
+                    "\t@TMP\n" + \
                     "\tM=D\n"
 
             # decrement stack pointer
@@ -99,8 +103,8 @@ class MemoryAccess:
             code += "\tA=M\n" + \
                     "\tD=M\n"
 
-            # load pointer from R13 and set to value D
-            code += "\t@R13\n" + \
+            # load pointer from TMP and set to value D
+            code += "\t@TMP\n" + \
                     "\tA=M\n" + \
                     "\tM=D\n"
 

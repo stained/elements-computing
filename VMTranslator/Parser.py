@@ -22,7 +22,8 @@ class Parser:
                   "add": Arithmetic, "sub": Arithmetic, "neg": Arithmetic,              # arithmetic
                   "eq": Arithmetic, "gt": Arithmetic, "lt": Arithmetic,
                   "and": Arithmetic, "or": Arithmetic, "not": Arithmetic,
-                  "label": FlowControl, "if_goto": FlowControl, "goto": FlowControl     # flow control
+                  "label": FlowControl, "if_goto": FlowControl, "goto": FlowControl,    # flow control
+                  "call": FlowControl, "function": FlowControl, "return": FlowControl
                   }
 
     def __init__(self, vmFilePath):

@@ -1,6 +1,9 @@
 from MemoryAccess import MemoryAccess
 
+
 class FlowControl:
+
+    callReturnFunctions = {}
 
     def __init__(self):
         return
@@ -13,25 +16,46 @@ class FlowControl:
             return parser.currentFunction + "$" + label
 
     @staticmethod
-    def _call(parser, _function, argCount):
+    def vm_init():
+        # SP = 256
+        code = "\t// init vm\n" + \
+               "\t@256\n" + \
+               "\tD=A\n" + \
+               "\t@SP\n" + \
+               "\tM=D\n"
+
+        # call Sys.init
+        code += FlowControl.vm_call(None, "Sys.init", "0")
+
+        return code
+
+    @staticmethod
+    def vm_call(parser, _function, argCount):
         # call comment
         code = "\t// call " + _function + " " + argCount + "\n"
 
         # put return address onto stack
-        returnLabel = _function + "$ret"
-        code += MemoryAccess._push(parser, "constant", returnLabel)
+        returnLabel = None
+        if _function in FlowControl.callReturnFunctions:
+            FlowControl.callReturnFunctions[_function] = FlowControl.callReturnFunctions[_function] + 1
+            returnLabel = _function + "." + str(FlowControl.callReturnFunctions[_function]) + "$ret"
+        else:
+            FlowControl.callReturnFunctions[_function] = 0
+            returnLabel = _function + "$ret"
+
+        code += MemoryAccess.vm_push(parser, "constant", returnLabel)
 
         # PUSH LCL
-        code += MemoryAccess._push(parser, "memory", "LCL")
+        code += MemoryAccess.vm_push(parser, "memory", "LCL")
 
         # PUSH ARG
-        code += MemoryAccess._push(parser, "memory", "ARG")
+        code += MemoryAccess.vm_push(parser, "memory", "ARG")
 
         # PUSH THIS
-        code += MemoryAccess._push(parser, "memory", "THIS")
+        code += MemoryAccess.vm_push(parser, "memory", "THIS")
 
         # PUSH THAT
-        code += MemoryAccess._push(parser, "memory", "THAT")
+        code += MemoryAccess.vm_push(parser, "memory", "THAT")
 
         # ARG = SP - n - 5
         code += "\t@SP\n" + \
@@ -57,7 +81,7 @@ class FlowControl:
         return code
 
     @staticmethod
-    def _function(parser, _function, localCount):
+    def vm_function(parser, _function, localCount):
         # function comment
         code = "// " + _function + " " + localCount + "\n"
 
@@ -70,12 +94,12 @@ class FlowControl:
         # push 0 for each local variable
         code += "\t// push empty local variables (" + localCount + ")\n"
         for i in range(0, int(localCount)):
-            code += MemoryAccess._push(parser, "constant", "0")
+            code += MemoryAccess.vm_push(parser, "constant", "0")
 
         return code
 
     @staticmethod
-    def _return(parser):
+    def vm_return(parser):
         # return comment
         code = "\t// return\n"
 
@@ -97,7 +121,7 @@ class FlowControl:
                 "\tM=D\n"
 
         # *ARG = POP()
-        code += MemoryAccess._pop(parser, "argument", "0")
+        code += MemoryAccess.vm_pop(parser, "argument", "0")
 
         # SP = ARG + 1
         code += "\t@ARG\n" + \
@@ -150,7 +174,7 @@ class FlowControl:
         return code
 
     @staticmethod
-    def _label(parser, label):
+    def vm_label(parser, label):
         # label comment
         code = "// label " + label + "\n"
 
@@ -158,12 +182,12 @@ class FlowControl:
         return code
 
     @staticmethod
-    def _if_goto(parser, label):
+    def vm_if_goto(parser, label):
         # if-goto comment
         code = "\t// if-goto " + label + "\n"
 
         # pop into D
-        code += MemoryAccess._pop(parser, "", "0")
+        code += MemoryAccess.vm_pop(parser, "", "0")
 
         code += "\t@" + FlowControl.getLabelName(parser, label) + "\n" \
                 "\tD;JNE\n"
@@ -171,7 +195,7 @@ class FlowControl:
         return code
 
     @staticmethod
-    def _goto(parser, label):
+    def vm_goto(parser, label):
         # goto comment
         code = "\t// goto " + label + "\n"
 

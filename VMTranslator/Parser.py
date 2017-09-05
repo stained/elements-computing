@@ -26,18 +26,18 @@ class Parser:
                   "call": FlowControl, "function": FlowControl, "return": FlowControl
                   }
 
-    def __init__(self, vmFilePath):
+    def __init__(self, vmFilePath, outFile):
         self.vmFilePath = vmFilePath
+        self.outFile = outFile
+
         self.filePath, self.fileName = os.path.split(vmFilePath)
         self.vmName, self.fileExtension = os.path.splitext(self.fileName)
+
         self.lineNumber = 0
         self.currentFunction = None
 
     def parse(self):
         self.lineNumber = 0
-
-        outputFilename = self.vmFilePath.replace(".vm", ".asm")
-        outFile = open(outputFilename, 'w')
 
         # open file and traverse commands
         with open(self.vmFilePath) as vmFile:
@@ -61,17 +61,15 @@ class Parser:
                         asmOutput = None
 
                         try:
-                            # prepend _ because "not" (for example) is a reserved word
-                            asmOutput = getattr(commandClass(), "_" + command)(self, *commandLine)
+                            # prepend vm_ because "not" (for example) is a reserved word
+                            asmOutput = getattr(commandClass(), "vm_" + command)(self, *commandLine)
                         except AttributeError:
                             print("command " + command + " not implemented")
                             continue
 
-                        print(asmOutput)
-                        outFile.write(asmOutput)
+                        self.outFile.write(asmOutput)
                         self.lineNumber = self.lineNumber + 1
 
-        outFile.close()
 
 
 

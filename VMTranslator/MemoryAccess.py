@@ -33,7 +33,7 @@ class MemoryAccess:
         return code
 
     @staticmethod
-    def _push(parser, segment, index):
+    def vm_push(parser, segment, index):
         # add comment for command
         code = "\t// push " + segment + " " + index + "\n"
 
@@ -82,7 +82,7 @@ class MemoryAccess:
         return code
 
     @staticmethod
-    def _pop(parser, segment, index):
+    def vm_pop(parser, segment, index):
         code = "\t// pop " + segment + " " + index + "\n"
 
         if segment in MemoryAccess.segmentRegisterMap:

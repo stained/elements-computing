@@ -6,7 +6,7 @@ class Arithmetic:
         return
 
     @staticmethod
-    def _add(parser):
+    def vm_add(parser):
         code = "\t// add\n"
 
         # decrement stack pointer
@@ -28,7 +28,7 @@ class Arithmetic:
         return code
 
     @staticmethod
-    def _sub(parser):
+    def vm_sub(parser):
         code = "\t// sub\n"
 
         # decrement stack pointer
@@ -50,7 +50,7 @@ class Arithmetic:
         return code
 
     @staticmethod
-    def _neg(parser):
+    def vm_neg(parser):
         code = "\t// neg\n"
 
         # decrement stack pointer
@@ -65,7 +65,7 @@ class Arithmetic:
         return code
 
     @staticmethod
-    def _eq(parser):
+    def vm_eq(parser):
         code = "\t// eq\n"
 
         # decrement stack pointer
@@ -114,7 +114,7 @@ class Arithmetic:
         return code
 
     @staticmethod
-    def _lt(parser):
+    def vm_lt(parser):
         code = "\t// lt\n"
 
         # decrement stack pointer
@@ -163,7 +163,7 @@ class Arithmetic:
         return code
 
     @staticmethod
-    def _gt(parser):
+    def vm_gt(parser):
         code = "\t// gt\n"
 
         # decrement stack pointer
@@ -212,7 +212,7 @@ class Arithmetic:
         return code
 
     @staticmethod
-    def _not(parser):
+    def vm_not(parser):
         code = "\t// not\n"
 
         # decrement stack pointer
@@ -227,7 +227,7 @@ class Arithmetic:
         return code
 
     @staticmethod
-    def _and(parser):
+    def vm_and(parser):
         code = "\t// and\n"
 
         # decrement stack pointer
@@ -249,7 +249,7 @@ class Arithmetic:
         return code
 
     @staticmethod
-    def _or(parser):
+    def vm_or(parser):
         code = "\t// or\n"
 
         # decrement stack pointer

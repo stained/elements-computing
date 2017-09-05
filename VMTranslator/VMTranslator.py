@@ -42,7 +42,7 @@ if __name__ == "__main__":
         for filePath in vmFiles:
             parser = Parser(filePath, outFile)
             parser.parse(writeInit)
-            writeInit = not writeInit
+            writeInit = False
 
         outFile.close()
 

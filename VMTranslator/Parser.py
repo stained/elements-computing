@@ -36,8 +36,14 @@ class Parser:
         self.lineNumber = 0
         self.currentFunction = None
 
-    def parse(self):
+    def parse(self, writeInit):
         self.lineNumber = 0
+
+        if writeInit:
+            # write bootstrap code
+            # init sp
+            asmOutput = FlowControl.vm_init(self)
+            self.outFile.write(asmOutput)
 
         # open file and traverse commands
         with open(self.vmFilePath) as vmFile:

@@ -39,15 +39,10 @@ if __name__ == "__main__":
     if len(vmFiles) > 0:
         outFile = open(outputFilename, 'w')
 
-        if writeInit:
-            # write bootstrap code
-            # init sp
-            asmOutput = FlowControl.vm_init()
-            outFile.write(asmOutput)
-
         for filePath in vmFiles:
             parser = Parser(filePath, outFile)
-            parser.parse()
+            parser.parse(writeInit)
+            writeInit = not writeInit
 
         outFile.close()
 

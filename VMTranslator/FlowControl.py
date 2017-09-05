@@ -16,7 +16,7 @@ class FlowControl:
             return parser.currentFunction + "$" + label
 
     @staticmethod
-    def vm_init():
+    def vm_init(parser):
         # SP = 256
         code = "\t// init vm\n" + \
                "\t@256\n" + \
@@ -25,7 +25,7 @@ class FlowControl:
                "\tM=D\n"
 
         # call Sys.init
-        code += FlowControl.vm_call(None, "Sys.init", "0")
+        code += FlowControl.vm_call(parser, "Sys.init", "0")
 
         return code
 

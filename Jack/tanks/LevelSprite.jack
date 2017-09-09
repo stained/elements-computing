@@ -1,0 +1,106 @@
+class LevelSprite
+{
+	field int x;
+	field int y;
+	field int type;
+	field int offset;
+
+	/**
+	 * Create a new Steel Wall Level Sprite
+	 * @param int xOffset
+	 * @param int yOffset
+	 */
+	constructor LevelSprite newSteelWall(int xOffset, int yOffset)
+	{
+		let x = xOffset;
+		let y = yOffset;
+		let offset = x + (y * 512);
+		let type = 2;
+
+		return this;
+	}
+
+	/**
+	 * Create a new Concrete Wall Level Sprite
+	 * @param int xOffset
+	 * @param int yOffset
+	 */
+	constructor LevelSprite newConcreteWall(int xOffset, int yOffset)
+	{
+		let x = xOffset;
+		let y = yOffset;
+		let offset = x + (y * 512);
+		let type = 1;
+
+		return this;
+	}
+
+	/**
+	 * Draw the actual sprite, based on type
+	 */
+	method void draw()
+	{
+		if (type = 2) {
+			do drawSteelWall(offset);
+		}
+		else {
+			if (type = 1) {
+				do drawConcreteWall(offset);
+			}
+		}
+
+		return;
+	}
+
+	method void drawSteelWall(int location) 
+	{
+		var int memAddress; 
+		let memAddress = 16384+location;
+		do Memory.poke(memAddress+0, -1);
+		do Memory.poke(memAddress+32, -1);
+		do Memory.poke(memAddress+64, -1);
+		do Memory.poke(memAddress+96, -1);
+		do Memory.poke(memAddress+128, -1);
+		do Memory.poke(memAddress+160, -1);
+		do Memory.poke(memAddress+192, -1);
+		do Memory.poke(memAddress+224, -1);
+		do Memory.poke(memAddress+256, -1);
+		do Memory.poke(memAddress+288, -1);
+		do Memory.poke(memAddress+320, -1);
+		do Memory.poke(memAddress+352, -1);
+		do Memory.poke(memAddress+384, -1);
+		do Memory.poke(memAddress+416, -1);
+		do Memory.poke(memAddress+448, -1);
+		do Memory.poke(memAddress+480, -1);
+		return;
+	}
+
+	method void drawConcreteWall(int location) 
+	{
+		var int memAddress; 
+		let memAddress = 16384+location;
+		do Memory.poke(memAddress+0, 32766);
+		do Memory.poke(memAddress+32, -32767);
+		do Memory.poke(memAddress+64, -32767);
+		do Memory.poke(memAddress+96, -32767);
+		do Memory.poke(memAddress+128, -32767);
+		do Memory.poke(memAddress+160, -32767);
+		do Memory.poke(memAddress+192, -32767);
+		do Memory.poke(memAddress+224, -32767);
+		do Memory.poke(memAddress+256, -32767);
+		do Memory.poke(memAddress+288, -32767);
+		do Memory.poke(memAddress+320, -32767);
+		do Memory.poke(memAddress+352, -32767);
+		do Memory.poke(memAddress+384, -32767);
+		do Memory.poke(memAddress+416, -32767);
+		do Memory.poke(memAddress+448, -32767);
+		do Memory.poke(memAddress+480, 32766);
+		return;
+	}	
+
+	method void dispose()
+	{
+		do Memory.deAlloc(this);
+		return;
+	}
+}

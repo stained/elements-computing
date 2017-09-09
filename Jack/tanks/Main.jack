@@ -1,0 +1,19 @@
+class Main
+{
+	function void main() 
+	{
+		// create a new Level1 object
+		var Level1 level1;
+		let level1 = Level1.new();
+
+		// and display it
+		do level1.draw();
+
+		// draw tank
+
+		// draw enemy
+
+		return;
+	}
+
+}

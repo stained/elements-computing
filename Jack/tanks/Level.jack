@@ -1,0 +1,221 @@
+class Level
+{
+	// contains all level sprites
+	field Array levelDefinition;
+
+	// level definitions
+	field Level1 level1;
+
+	// Player start locations and directions
+	field int player1StartDirection;
+	field int player2StartDirection;
+	field int player1StartX;
+	field int player1StartY;
+	field int player2StartX;
+	field int player2StartY;
+
+	// number of moves per player turn
+	// each level can set this
+	field int movesPerTurn;
+
+	// max distance bullet travels
+	field int maxShootingDistance;
+
+	/**
+	 * Create a new Level object
+	 */
+	constructor Level new() 
+	{
+		// Level is defined as a collection of 16x16 LevelSprites
+		// 512x256 pixels on the screen equates to 32x16 LevelSprites (or 512 sprites in total)
+		let levelDefinition = Array.new(512);
+
+		// *******************************
+		// Draw Header
+		// *******************************
+
+		do Output.moveCursor(0, 20);
+		do Main.printString("Tiny Turn-based Tanks");
+
+		// player icons
+		let levelDefinition[Level.getSpriteIndex(1, 0)] = LevelSprite.newPlayerIcon(1, 0, 1);				// player 1
+		let levelDefinition[Level.getSpriteIndex(30, 0)] = LevelSprite.newPlayerIcon(30, 0, 2);				// player 2
+
+		// *******************************
+		// Create Level
+		// *******************************
+
+		// create new level 1
+		let level1 = Level1.new(levelDefinition);
+
+		let player1StartDirection = level1.getPlayer1StartDirection();
+		let player2StartDirection = level1.getPlayer2StartDirection();
+		let player1StartX = level1.getPlayer1StartX();
+		let player1StartY = level1.getPlayer1StartY();
+		let player2StartX = level1.getPlayer2StartX();
+		let player2StartY = level1.getPlayer2StartY();
+
+		let movesPerTurn = level1.getMovesPerTurn();
+		let maxShootingDistance = level1.getMaxShootingDistance();
+
+		// dispose level 1 object because we have everything we need
+		do level1.dispose();
+
+		return this;
+	}
+
+	/**
+	 * Get max bullet distance travel
+	 */
+	method int getMaxShootingDistance()
+	{
+		return maxShootingDistance;
+	}
+
+	/**
+	 * Get Player 1 start direction
+	 */
+	method int getPlayer1StartDirection()
+	{
+		return player1StartDirection;
+	}
+
+	/**
+	 * Get Player 1 start offset X
+	 */
+	method int getPlayer1StartX()
+	{
+		return player1StartX;
+	} 
+
+	/**
+	 * Get Player 1 start offset Y
+	 */
+	method int getPlayer1StartY()
+	{
+		return player1StartY;
+	} 
+
+	/**
+	 * Get Player 2 start direction
+	 */
+	method int getPlayer2StartDirection()
+	{
+		return player2StartDirection;
+	}
+
+	/**
+	 * Get Player 2 start offset X
+	 */
+	method int getPlayer2StartX()
+	{
+		return player2StartX;
+	} 
+
+	/**
+	 * Get Player 2 start offset Y
+	 */
+	method int getPlayer2StartY()
+	{
+		return player2StartY;
+	} 	
+
+	method int getMovesPerTurn()
+	{
+	 	return movesPerTurn;
+	}
+
+	/**
+	 * Calculate the sprite's index in the levelDefinition array
+	 * @param int x
+	 * @param int y
+	 */
+	function int getSpriteIndex(int x, int y)
+	{
+		return (32 * y) + x;
+	}
+
+	/**
+	 * draw all level sprites to screen
+	 */
+	method void draw()
+	{
+		var int i;
+		var int pointer;
+		var LevelSprite levelSprite;
+
+		let i = 0;
+
+		while (i < 512) {
+			// check if there's a non-empty sprite at memory location
+			let pointer = levelDefinition[i];
+
+			if (pointer > 0) {
+				let levelSprite = levelDefinition[i];
+				do levelSprite.draw();
+			}
+
+			let i = i + 1;
+		}
+
+		return;
+	}
+
+	/**
+	 * Remove sprite at x, y
+	 */
+	method void removeSprite(int x, int y)
+	{
+		var int index;
+		var int pointer;
+		var LevelSprite levelSprite;
+
+		let index = Level.getSpriteIndex(x, y);
+
+		let pointer = levelDefinition[index];
+
+		if (pointer > 0) {
+			let levelSprite = levelDefinition[index];
+			do levelSprite.remove();
+			do levelSprite.dispose();
+		}
+
+		let levelDefinition[index] = 0;
+
+		return;
+	}
+
+	/**
+	 * Check if the player or player bullet is colliding with level geometry
+	 * @return int type
+	 */
+	method int detectCollision(int x, int y)
+	{
+		// check if there's a sprite at that index
+
+		var int index;
+		var int pointer;
+		var int typeDetected;
+		var LevelSprite levelSprite;
+
+		let index = Level.getSpriteIndex(x, y);
+
+		let pointer = levelDefinition[index];
+
+		if (pointer > 0) {
+			let levelSprite = levelDefinition[index];
+			let typeDetected = levelSprite.getType();
+			return typeDetected;
+		}
+
+		return 0;
+	}
+
+	method void dispose()
+	{
+		do levelDefinition.dispose();
+
+		do Memory.deAlloc(this);
+		return;
+	}
+}

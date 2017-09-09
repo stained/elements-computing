@@ -2,6 +2,13 @@ class LevelSprite
 {
 	field int x;
 	field int y;
+
+	// types:
+	// 0 - empty, no sprite
+	// 1 - concrete
+	// 2 - steel
+	// 101 - player 1 icon
+	// 102 - player 2 icon
 	field int type;
 	field int offset;
 
@@ -36,20 +43,61 @@ class LevelSprite
 	}
 
 	/**
+	 * Create new player icon sprite
+	 */
+	constructor LevelSprite newPlayerIcon(int xOffset, int yOffset, int player)
+	{
+		let x = xOffset;
+		let y = yOffset;
+		let offset = x + (y * 512);
+		let type = 100 + player;
+
+		return this;
+	}
+
+	/**
 	 * Draw the actual sprite, based on type
 	 */
 	method void draw()
 	{
 		if (type = 2) {
 			do drawSteelWall(offset);
+			return;
 		}
-		else {
-			if (type = 1) {
-				do drawConcreteWall(offset);
-			}
+
+		if (type = 1) {
+			do drawConcreteWall(offset);
+			return;
+		}
+
+		if (type = 101) {
+			do drawPlayer1Icon(offset);
+			return;
+		}
+
+		if (type = 102) {
+			do drawPlayer2Icon(offset);
+			return;
 		}
 
 		return;
+	}
+
+	/**
+	 * Remove the sprite from the screen
+	 */ 
+	method void remove()
+	{
+		do clear(offset);
+		return;
+	}
+
+	/**
+	 * return type of level sprite
+	 */
+	method int getType()
+	{
+		return type;
 	}
 
 	method void drawSteelWall(int location) 
@@ -97,6 +145,76 @@ class LevelSprite
 		do Memory.poke(memAddress+480, 32766);
 		return;
 	}	
+
+	method void clear(int location) {
+		var int memAddress; 
+		let memAddress = 16384+location;
+		do Memory.poke(memAddress+0, 0);
+		do Memory.poke(memAddress+32, 0);
+		do Memory.poke(memAddress+64, 0);
+		do Memory.poke(memAddress+96, 0);
+		do Memory.poke(memAddress+128, 0);
+		do Memory.poke(memAddress+160, 0);
+		do Memory.poke(memAddress+192, 0);
+		do Memory.poke(memAddress+224, 0);
+		do Memory.poke(memAddress+256, 0);
+		do Memory.poke(memAddress+288, 0);
+		do Memory.poke(memAddress+320, 0);
+		do Memory.poke(memAddress+352, 0);
+		do Memory.poke(memAddress+384, 0);
+		do Memory.poke(memAddress+416, 0);
+		do Memory.poke(memAddress+448, 0);
+		do Memory.poke(memAddress+480, 0);
+		return;
+	}	
+
+	method void drawPlayer1Icon(int location) {
+		var int memAddress; 
+		let memAddress = 16384+location;
+
+		do Memory.poke(memAddress+0, 0);
+		do Memory.poke(memAddress+32, 960);
+		do Memory.poke(memAddress+64, 384);
+		do Memory.poke(memAddress+96, 384);
+		do Memory.poke(memAddress+128, 384);
+		do Memory.poke(memAddress+160, 31134);
+		do Memory.poke(memAddress+192, 22938);
+		do Memory.poke(memAddress+224, 28662);
+		do Memory.poke(memAddress+256, 24570);
+		do Memory.poke(memAddress+288, 28662);
+		do Memory.poke(memAddress+320, 24570);
+		do Memory.poke(memAddress+352, 28662);
+		do Memory.poke(memAddress+384, 22938);
+		do Memory.poke(memAddress+416, 26646);
+		do Memory.poke(memAddress+448, 30750);
+		do Memory.poke(memAddress+480, 0);
+
+		return;
+	}
+
+	method void drawPlayer2Icon(int location) {
+		var int memAddress; 
+		let memAddress = 16384+location;
+
+		do Memory.poke(memAddress+0, 0);
+		do Memory.poke(memAddress+32, 384);
+		do Memory.poke(memAddress+64, 384);
+		do Memory.poke(memAddress+96, 384);
+		do Memory.poke(memAddress+128, 384);
+		do Memory.poke(memAddress+160, 31134);
+		do Memory.poke(memAddress+192, 27606);
+		do Memory.poke(memAddress+224, 24570);
+		do Memory.poke(memAddress+256, 26646);
+		do Memory.poke(memAddress+288, 22554);
+		do Memory.poke(memAddress+320, 26646);
+		do Memory.poke(memAddress+352, 24570);
+		do Memory.poke(memAddress+384, 27606);
+		do Memory.poke(memAddress+416, 22554);
+		do Memory.poke(memAddress+448, 30750);
+		do Memory.poke(memAddress+480, 0);
+
+		return;
+	}
 
 	method void dispose()
 	{

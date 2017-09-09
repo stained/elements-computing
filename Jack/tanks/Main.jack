@@ -2,18 +2,23 @@ class Main
 {
 	function void main() 
 	{
-		// create a new Level1 object
-		var Level1 level1;
-		let level1 = Level1.new();
+		// create a new tank game
+		var TankGame tankGame;
+		let tankGame = TankGame.new();
 
-		// and display it
-		do level1.draw();
+		// and enter game loop
+		do tankGame.run();
 
-		// draw tank
-
-		// draw enemy
+		// done, so clean up everything
+		do tankGame.dispose();
 
 		return;
 	}
 
+	function void printString(String str)
+	{
+		do Output.printString(str);
+		do str.dispose();
+		return;
+	}
 }

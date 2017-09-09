@@ -1,8 +1,20 @@
 function Main.main 1
-call Level1.new 0
+call TankGame.new 0
 pop local 0
 push local 0
-call Level1.draw 1
+call TankGame.run 1
+pop temp 0
+push local 0
+call TankGame.dispose 1
+pop temp 0
+push constant 0
+return
+function Main.printString 0
+push argument 0
+call Output.printString 1
+pop temp 0
+push argument 0
+call String.dispose 1
 pop temp 0
 push constant 0
 return

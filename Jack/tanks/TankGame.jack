@@ -1,0 +1,316 @@
+class TankGame
+{
+	// current level
+	field Level level;
+
+	// Player 1
+	field Player player1;
+
+	// Player 2
+	field Player player2;
+
+	// Whether it's player 1's turn
+	field boolean player1Turn;
+
+	// Whether game is waiting for player to begin turn (press enter)
+	field boolean playerTurnWaiting;
+
+	// Number of moves remaining for player turn
+	field int movesRemaining;
+
+	// Max shooting distance
+	field int maxShootingDistance;
+
+	// Current player scores
+	field int player1Score;
+	field int player2Score;
+
+	// whether it's the start of a new round
+	field boolean newRound;
+
+	/**
+	 * Create a new tank game
+	 */
+	constructor TankGame new()
+	{
+		// create a new Level object
+		let level = Level.new();
+
+		let maxShootingDistance = level.getMaxShootingDistance();
+
+		// and display it
+		do level.draw();
+
+		// init player1
+		let player1 = Player.new(this, 1, level.getPlayer1StartX(), level.getPlayer1StartY(), level.getPlayer1StartDirection());
+
+		// init player2
+		let player2 = Player.new(this, 2, level.getPlayer2StartX(), level.getPlayer2StartY(), level.getPlayer2StartDirection());
+
+		// reset score
+		do resetScore();
+
+		// reset players
+		do resetPlayerPositions();
+
+		return this;
+	}
+
+	method int getMaxShootingDistance()
+	{
+		return maxShootingDistance;
+	}
+
+	method void resetScore()
+	{
+		let player1Score = 0;
+		let player2Score = 0;
+
+		do Output.moveCursor(1, 5);
+		do Output.printInt(0);
+		do Output.moveCursor(1, 58);
+		do Output.printInt(0);
+
+		return;
+	}
+
+	method void setScore(int score)
+	{
+		if (player1Turn) {
+			do Output.moveCursor(1, 5);
+			do Output.printInt(score);
+		} else {
+			do Output.moveCursor(1, 58);
+			do Output.printInt(score);
+		}
+
+		return;
+	}
+
+	method void updateMovesRemaining()
+	{
+		do Output.moveCursor(1, 18);
+		// clear
+		do Main.printString("                                  ");
+		do Output.moveCursor(1, 18);
+
+		if (player1Turn) {
+			do Main.printString("Player 1: ");
+		} else {
+			do Main.printString("Player 2: ");
+		}
+
+		do Output.printInt(movesRemaining);
+
+		if (movesRemaining = 1) {
+			do Main.printString(" move remains.");
+		} else {
+			do Main.printString(" moves remain.");
+		}
+
+		return;
+	}
+
+	method void nextTurn()
+	{
+		let playerTurnWaiting = false;
+		let movesRemaining = level.getMovesPerTurn();
+		do Output.moveCursor(1, 9);
+
+		// clear
+		do Main.printString("                                              ");
+
+		do updateMovesRemaining();
+
+		return;
+	}
+
+	method boolean decrementAndCheckMovesRemaining()
+	{
+		if (newRound) {
+			return false;
+		}
+
+		let movesRemaining = movesRemaining - 1;
+		do updateMovesRemaining();
+
+		if (movesRemaining = 0) {
+			do turnOver();
+			return false; 
+		}
+
+		return true;
+	}
+
+	method void turnOver()
+	{
+		let player1Turn = ~player1Turn;
+		let playerTurnWaiting = true;
+
+		do Output.moveCursor(1, 9);
+		// clear
+		do Main.printString("                                              ");
+		do Output.moveCursor(1, 9);
+
+		if (player1Turn) {
+			do Main.printString("Player 1");
+		} else {
+			do Main.printString("Player 2");
+		}
+
+		do Main.printString(" your turn! Press [ENTER] to continue.");
+
+		return;
+	}
+
+	/**
+	 * Detect whether player is colliding with other player (or shooting at them)
+	 * @param int x
+	 * @param int y
+	 * @param boolean isShooting
+	 */
+	method boolean detectPlayerCollision(int x, int y, boolean isShooting)
+	{
+		var boolean collided;
+		let collided = false;
+
+		if (player1Turn) {
+			// check against player 2
+			let collided = player2.detectCollision(x, y);
+		} else {
+			// check against player 1
+			let collided = player1.detectCollision(x, y);
+		}
+
+		if (isShooting & collided) {
+			// TODO deal with player killed
+			do playerKilled();
+		} 
+
+		return collided;
+	}
+
+	/**
+	 * Reset players to level positions
+	 */
+	method void resetPlayerPositions()
+	{
+		// reset start locations
+		do player1.setLocationAndDirection(level.getPlayer1StartX(), level.getPlayer1StartY(), level.getPlayer1StartDirection(), true);
+		do player2.setLocationAndDirection(level.getPlayer2StartX(), level.getPlayer2StartY(), level.getPlayer2StartDirection(), true);
+
+		// player 1 gets first go
+		let newRound = true;
+		let player1Turn = true;
+		do nextTurn();
+		return;
+	}
+
+	method void playerKilled()
+	{
+		// max 10 points per game
+		if (player2Score = 10 | player1Score = 10) {
+			// GAME OVER!
+			return;
+		}
+
+		if (player1Turn) {
+			let player1Score = player1Score + 1;
+			do setScore(player1Score);
+			do player2.explode();
+		} else {
+			let player2Score = player2Score + 1;
+			do setScore(player2Score);
+			do player1.explode();
+		}
+
+		do resetPlayerPositions();
+
+		return;
+	}
+
+	/**
+	 * Detect level geometry collision and determine whether it's an object that can be destroyed
+	 * @param int x
+	 * @param int y
+	 * @param boolean isShooting
+	 */
+	method boolean detectLevelCollision(int x, int y, boolean isShooting)
+	{
+		var int levelItemDetected;
+		let levelItemDetected = level.detectCollision(x, y);
+
+		// we only remove destructable items if the player is shooting at it
+		if (isShooting) {
+			if (levelItemDetected = 1) {
+				// concrete wall, can be destroyed
+				do level.removeSprite(x, y);
+			}
+		}
+
+		return levelItemDetected > 0;
+	}
+
+	/**
+	 * Game Loop
+	 */
+	method void run()
+	{
+		var boolean exit;					
+	    var char key;  						// the key currently pressed by the user
+
+		let exit = false;				
+
+		// game loop
+		while (~exit) {
+			// waits for a key to be pressed
+			while (key = 0) {
+				let key = Keyboard.keyPressed();
+			}
+
+			// q key
+			if (key = 81) { 
+				let exit = true; 
+			} else {
+				// player keys
+				if (~playerTurnWaiting) {
+					// pass key through to player objects
+					let newRound = false;
+
+					if (player1Turn) {
+						do player1.keyPressed(key);
+					} else {
+						do player2.keyPressed(key);
+					} 
+
+					// check whether player has moves still this turn
+					do decrementAndCheckMovesRemaining();
+				} else {
+					// check that next player acknowledges turn
+					if (key = 128) {
+						do nextTurn();
+					}
+				}
+
+				while (~(key = 0)) {
+					do Sys.wait(40);
+					let key = Keyboard.keyPressed();
+				}
+
+			}
+		}
+
+		return;
+	}
+
+	method void dispose()
+	{
+		do player1.dispose();
+		do player2.dispose();
+		do level.dispose();
+
+		do Memory.deAlloc(this);
+		return;
+	}
+
+}

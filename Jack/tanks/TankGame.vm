@@ -36,6 +36,9 @@ pop temp 0
 push pointer 0
 call TankGame.resetPlayerPositions 1
 pop temp 0
+push constant 0
+not
+pop this 3
 push pointer 0
 return
 function TankGame.getMaxShootingDistance 0
@@ -757,9 +760,6 @@ pop temp 0
 push constant 0
 not
 pop this 9
-push constant 0
-not
-pop this 3
 push pointer 0
 call TankGame.nextTurn 1
 pop temp 0

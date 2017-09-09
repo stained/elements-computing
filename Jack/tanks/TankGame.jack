@@ -53,6 +53,9 @@ class TankGame
 		// reset players
 		do resetPlayerPositions();
 
+		// player 1 gets first go
+		let player1Turn = true;
+
 		return this;
 	}
 
@@ -111,6 +114,9 @@ class TankGame
 		return;
 	}
 
+	/**
+	 * Reset moves remaining for next player's turn
+	 */ 
 	method void nextTurn()
 	{
 		let playerTurnWaiting = false;
@@ -195,13 +201,12 @@ class TankGame
 	 */
 	method void resetPlayerPositions()
 	{
-		// reset start locations
+		// reset start locations, and use the fancy tank load animation
 		do player1.setLocationAndDirection(level.getPlayer1StartX(), level.getPlayer1StartY(), level.getPlayer1StartDirection(), true);
 		do player2.setLocationAndDirection(level.getPlayer2StartX(), level.getPlayer2StartY(), level.getPlayer2StartDirection(), true);
 
-		// player 1 gets first go
+		// new round, player that last won goes first
 		let newRound = true;
-		let player1Turn = true;
 		do nextTurn();
 		return;
 	}

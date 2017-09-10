@@ -3,7 +3,7 @@
  */
 class TankGame
 {
-	// current level
+	// Level handler
 	field Level level;
 
 	// Player 1
@@ -45,11 +45,16 @@ class TankGame
 		// init player2
 		let player2 = Player.new(this, 2);
 
+		// load the first level
 		do loadLevel(1);
 
 		return this;
 	}
 
+	/**
+	 * Load a new level
+	 * @param int levelToLoad
+	 */ 
 	method void loadLevel(int levelToLoad)
 	{
 		// load level
@@ -80,11 +85,18 @@ class TankGame
 		return;
 	}
 
+	/**
+	 * Get max shooting distance for current level 
+	 * used in player.shoot()
+	 */
 	method int getMaxShootingDistance()
 	{
 		return maxShootingDistance;
 	}
 
+	/**
+	 * Reset scores and update on screen
+	 */
 	method void resetScore()
 	{
 		let player1Score = 0;
@@ -98,6 +110,9 @@ class TankGame
 		return;
 	}
 
+	/**
+	 * set score and update on screen
+	 */
 	method void setScore(int score)
 	{
 		if (player1Turn) {
@@ -111,6 +126,9 @@ class TankGame
 		return;
 	}
 
+	/**
+	 * Update moves remaining text
+	 */
 	method void updateMovesRemaining()
 	{
 		do Output.moveCursor(1, 19);
@@ -136,7 +154,7 @@ class TankGame
 	}
 
 	/**
-	 * Reset moves remaining for next player's turn
+	 * Switch player turn + reset moves remaining for next player's turn
 	 */ 
 	method void nextTurn()
 	{
@@ -152,6 +170,10 @@ class TankGame
 		return;
 	}
 
+	/**
+	 * Decrement player moves remaining count 
+	 * and check whether they have any moves remaining
+	 */
 	method boolean decrementAndCheckMovesRemaining()
 	{
 		if (newRound) {
@@ -169,6 +191,9 @@ class TankGame
 		return true;
 	}
 
+	/**
+	 * Player turn over, control goes to next player
+	 */
 	method void turnOver()
 	{
 		let player1Turn = ~player1Turn;
@@ -210,7 +235,7 @@ class TankGame
 		}
 
 		if (isShooting & collided) {
-			// TODO deal with player killed
+			// player got shot, so end round
 			do playerKilled();
 		} 
 
@@ -218,7 +243,7 @@ class TankGame
 	}
 
 	/**
-	 * Reset players to level positions
+	 * Reset player sprites to level-specific positions
 	 */
 	method void resetPlayerPositions()
 	{
@@ -232,6 +257,10 @@ class TankGame
 		return;
 	}
 
+	/**
+	 * Deal with player killed
+	 * increment score where game not over and deal with game over scenario (score = 10)
+	 */
 	method void playerKilled()
 	{
 		// max 10 points per game
@@ -241,8 +270,11 @@ class TankGame
 		}
 
 		if (player1Turn) {
+			// increment player1 score
 			let player1Score = player1Score + 1;
 			do setScore(player1Score);
+
+			// display simple explosion animation on player2 
 			do player2.explode();
 		} else {
 			let player2Score = player2Score + 1;
@@ -268,6 +300,7 @@ class TankGame
 
 		// we only remove destructable items if the player is shooting at it
 		if (isShooting) {
+			// TODO, potentially replace with generic "breakable" + "shootToBreakCount" 
 			if (levelItemDetected = 1) {
 				// concrete wall, can be destroyed
 				do level.removeSprite(x, y);
@@ -283,7 +316,9 @@ class TankGame
 	method void run()
 	{
 		var boolean exit;					
-	    var char key;  						// the key currently pressed by the user
+
+		// the key currently pressed by the user
+	    var char key;  						
 
 		let exit = false;				
 
@@ -324,6 +359,8 @@ class TankGame
 					}				
 				}
 
+				// key debounce.
+				// since this is a turn-based game we don't want the player to hold the keys down
 				while (~(key = 0)) {
 					do Sys.wait(40);
 					let key = Keyboard.keyPressed();
@@ -335,6 +372,9 @@ class TankGame
 		return;
 	}
 
+	/**
+	 * Clean up
+	 */
 	method void dispose()
 	{
 		do player1.dispose();

@@ -1,3 +1,6 @@
+/**
+ * Implements both player 1 and 2
+ */
 class Player
 {
 	// location and facing direction
@@ -8,14 +11,14 @@ class Player
 	// whether to show normal or alternative frame in movement
 	field bool alternativeFrame;
 
-	// reference to the tank gme
+	// reference to the tank game
 	field TankGame tankGame;
 
 	// player number
 	field int player;
 
 	/**
-	 * Create a new Player [1/2] at location, passing a reference to the current tank game object
+	 * Create a new Player [1/2], passing a reference to the current tank game object
 	 */
 	constructor Player new(Tankgame currentTankGame, int playerNumber)
 	{
@@ -23,6 +26,8 @@ class Player
 		let alternativeFrame = false;
 		let tankGame = currentTankGame;
 		let player = playerNumber;
+		let x = 0;
+		let y = 0;
 		return this;
 	}
 
@@ -34,6 +39,8 @@ class Player
 		var int offset;
 		let offset = x + (y * 512);
 		do clear(offset);
+
+		// move it to 0,0 (out of game area)
 		let x = 0;
 		let y = 0;
 		return;
@@ -77,7 +84,7 @@ class Player
 	}
 
 	/**
-	 * check whether another player has collided with this one
+	 * check whether another player (or bullet) has collided with this one
 	 */
 	method int detectCollision(int otherX, int otherY)
 	{
@@ -85,7 +92,8 @@ class Player
 	}
 
 	/**
-	 * Shoot a bullet, and keep moving until it hits something
+	 * Shoot a bullet, and keep it moving until it hits something, 
+	 * or hits shooting distance limit
 	 */
 	method void shoot()
 	{
@@ -136,6 +144,7 @@ class Player
 				return;
 			}
 
+			// bullet lives for one more tick
 			let distanceTravelled = distanceTravelled + 1;
 
 			let offset = bulletX + (bulletY * 512);
@@ -168,6 +177,7 @@ class Player
 
 	/**
 	 * Load tank onto the screen in a fancy way
+	 * (selectively re-using pieces of the explosion animation)
 	 */ 
 	method void fancyLoad()
 	{
@@ -257,6 +267,7 @@ class Player
 	 */
 	method void draw() 
 	{
+		// calculate screen memory offset
 		var int offset;
 		let offset = x + (y * 512);
 

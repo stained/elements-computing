@@ -1,3 +1,6 @@
+/**
+ * Complete Level handler
+ */
 class Level
 {
 	// contains all level sprites
@@ -84,6 +87,9 @@ class Level
 		return;
 	}
 
+	/**
+	 * Return the current level
+	 */
 	method int getCurrentLevel()
 	{
 		return currentLevel;
@@ -302,12 +308,17 @@ class Level
 		if (pointer > 0) {
 			let levelSprite = levelDefinition[index];
 			let typeDetected = levelSprite.getType();
+
+			// TODO return levelSprite so we can check breakable state
 			return typeDetected;
 		}
 
 		return 0;
 	}
 
+	/**
+	 * Cleanup level definition and self
+	 */
 	method void dispose()
 	{
 		do levelDefinition.dispose();

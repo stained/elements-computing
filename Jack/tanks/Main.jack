@@ -1,7 +1,21 @@
+/**
+ * Tiny Turn-based Tanks
+ * A game that [very] loosely resembles the tank stages from the 1977 Atari classic: Combat.
+ *
+ * Created for Nand2Tetris Part 2 on Coursera
+ * By Theo Ireton (2017)
+ *
+ * All code can be freely reused or extended (new levels!) without restriction.
+ */
 class Main
 {
+	/**
+	 * Entry point
+	 */ 
 	function void main() 
 	{
+		// TODO main menu + instructions
+
 		// create a new tank game
 		var TankGame tankGame;
 		let tankGame = TankGame.new();
@@ -15,6 +29,9 @@ class Main
 		return;
 	}
 
+	/**
+	 * Memory-disposing print constant string variant
+	 */ 
 	function void printString(String str)
 	{
 		do Output.printString(str);

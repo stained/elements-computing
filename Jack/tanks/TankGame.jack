@@ -1,3 +1,6 @@
+/**
+ * The actual tank game
+ */
 class TankGame
 {
 	// current level
@@ -36,27 +39,45 @@ class TankGame
 		// create a new Level object
 		let level = Level.new();
 
-		let maxShootingDistance = level.getMaxShootingDistance();
-
-		// and display it
-		do level.draw();
-
 		// init player1
-		let player1 = Player.new(this, 1, level.getPlayer1StartX(), level.getPlayer1StartY(), level.getPlayer1StartDirection());
+		let player1 = Player.new(this, 1);
 
 		// init player2
-		let player2 = Player.new(this, 2, level.getPlayer2StartX(), level.getPlayer2StartY(), level.getPlayer2StartDirection());
+		let player2 = Player.new(this, 2);
 
-		// reset score
-		do resetScore();
+		do loadLevel(1);
 
-		// reset players
-		do resetPlayerPositions();
+		return this;
+	}
+
+	method void loadLevel(int levelToLoad)
+	{
+		// load level
+		do level.loadLevel(levelToLoad);
+
+		let maxShootingDistance = level.getMaxShootingDistance();
 
 		// player 1 gets first go
 		let player1Turn = true;
 
-		return this;
+		// reset moves remaining
+		do updateMovesRemaining();
+
+		// reset score
+		do resetScore();
+
+		// remove players before drawing the level, else player removal 
+		// afterwards potentially leaves spaces in level geometry
+		do player1.remove();
+		do player2.remove();
+
+		// and display it
+		do level.draw();
+
+		// reset players
+		do resetPlayerPositions();
+
+		return;
 	}
 
 	method int getMaxShootingDistance()
@@ -92,10 +113,10 @@ class TankGame
 
 	method void updateMovesRemaining()
 	{
-		do Output.moveCursor(1, 18);
+		do Output.moveCursor(1, 19);
 		// clear
 		do Main.printString("                                  ");
-		do Output.moveCursor(1, 18);
+		do Output.moveCursor(1, 19);
 
 		if (player1Turn) {
 			do Main.printString("Player 1: ");
@@ -273,28 +294,34 @@ class TankGame
 				let key = Keyboard.keyPressed();
 			}
 
-			// q key
+			// Q key
 			if (key = 81) { 
 				let exit = true; 
 			} else {
-				// player keys
-				if (~playerTurnWaiting) {
-					// pass key through to player objects
-					let newRound = false;
+				// Z key
+				if (key = 90) {
+					// load next level
+					do loadLevel(level.getCurrentLevel() + 1);	
+				} else  {
+					// player keys
+					if (~playerTurnWaiting) {
+						// pass key through to player objects
+						let newRound = false;
 
-					if (player1Turn) {
-						do player1.keyPressed(key);
+						if (player1Turn) {
+							do player1.keyPressed(key);
+						} else {
+							do player2.keyPressed(key);
+						} 
+
+						// check whether player has moves still this turn
+						do decrementAndCheckMovesRemaining();
 					} else {
-						do player2.keyPressed(key);
-					} 
-
-					// check whether player has moves still this turn
-					do decrementAndCheckMovesRemaining();
-				} else {
-					// check that next player acknowledges turn
-					if (key = 128) {
-						do nextTurn();
-					}
+						// check that next player acknowledges turn
+						if (key = 128) {
+							do nextTurn();
+						}
+					}				
 				}
 
 				while (~(key = 0)) {

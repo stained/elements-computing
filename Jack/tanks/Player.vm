@@ -8,15 +8,28 @@ push constant 0
 pop this 3
 push argument 0
 pop this 4
-push argument 2
-pop this 1
-push argument 3
-pop this 2
-push argument 4
-pop this 0
 push argument 1
 pop this 5
 push pointer 0
+return
+function Player.remove 1
+push argument 0
+pop pointer 0
+push this 1
+push this 2
+push constant 512
+call Math.multiply 2
+add
+pop local 0
+push pointer 0
+push local 0
+call Player.clear 2
+pop temp 0
+push constant 0
+pop this 1
+push constant 0
+pop this 2
+push constant 0
 return
 function Player.setLocationAndDirection 0
 push argument 0

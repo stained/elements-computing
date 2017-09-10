@@ -1,0 +1,708 @@
+function Level2.new 1
+push constant 1
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+pop this 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push constant 32
+lt
+not
+if-goto WHILE_END0
+push local 0
+push constant 2
+call Level.getSpriteIndex 2
+push this 0
+add
+push local 0
+push constant 2
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 15
+call Level.getSpriteIndex 2
+push this 0
+add
+push local 0
+push constant 15
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 3
+pop local 0
+label WHILE_EXP1
+push local 0
+push constant 15
+lt
+not
+if-goto WHILE_END1
+push constant 0
+push local 0
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 0
+push local 0
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 31
+push local 0
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 31
+push local 0
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP1
+label WHILE_END1
+push constant 15
+push constant 5
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 15
+push constant 5
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 16
+push constant 5
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 16
+push constant 5
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 15
+push constant 12
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 15
+push constant 12
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 16
+push constant 12
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 16
+push constant 12
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 5
+push constant 8
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 5
+push constant 8
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 5
+push constant 9
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 5
+push constant 9
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 26
+push constant 8
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 26
+push constant 8
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 26
+push constant 9
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 26
+push constant 9
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 13
+push constant 4
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 13
+push constant 4
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 18
+push constant 4
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 18
+push constant 4
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 13
+push constant 5
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 13
+push constant 5
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 18
+push constant 5
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 18
+push constant 5
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 14
+push constant 5
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 14
+push constant 5
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 17
+push constant 5
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 17
+push constant 5
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 13
+push constant 13
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 13
+push constant 13
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 18
+push constant 13
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 18
+push constant 13
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 13
+push constant 12
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 13
+push constant 12
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 18
+push constant 12
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 18
+push constant 12
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 14
+push constant 12
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 14
+push constant 12
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 17
+push constant 12
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 17
+push constant 12
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 15
+push constant 8
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 15
+push constant 8
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 16
+push constant 8
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 16
+push constant 8
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 15
+push constant 9
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 15
+push constant 9
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 16
+push constant 9
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 16
+push constant 9
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 3
+push constant 6
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 3
+push constant 6
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 4
+push constant 6
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 4
+push constant 6
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 5
+push constant 6
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 5
+push constant 6
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 6
+push constant 6
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 6
+push constant 6
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 5
+push constant 7
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 5
+push constant 7
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 6
+push constant 7
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 6
+push constant 7
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 5
+push constant 10
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 5
+push constant 10
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 6
+push constant 10
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 6
+push constant 10
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 3
+push constant 11
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 3
+push constant 11
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 4
+push constant 11
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 4
+push constant 11
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 5
+push constant 11
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 5
+push constant 11
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 6
+push constant 11
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 6
+push constant 11
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 25
+push constant 6
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 25
+push constant 6
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 26
+push constant 6
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 26
+push constant 6
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 27
+push constant 6
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 27
+push constant 6
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 28
+push constant 6
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 28
+push constant 6
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 25
+push constant 7
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 25
+push constant 7
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 26
+push constant 7
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 26
+push constant 7
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 25
+push constant 10
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 25
+push constant 10
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 26
+push constant 10
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 26
+push constant 10
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 25
+push constant 11
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 25
+push constant 11
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 26
+push constant 11
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 26
+push constant 11
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 27
+push constant 11
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 27
+push constant 11
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 28
+push constant 11
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 28
+push constant 11
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push pointer 0
+return
+function Level2.getMaxShootingDistance 0
+push argument 0
+pop pointer 0
+push constant 10
+return
+function Level2.getMovesPerTurn 0
+push argument 0
+pop pointer 0
+push constant 15
+return
+function Level2.getPlayer1StartDirection 0
+push argument 0
+pop pointer 0
+push constant 0
+return
+function Level2.getPlayer1StartX 0
+push argument 0
+pop pointer 0
+push constant 3
+return
+function Level2.getPlayer1StartY 0
+push argument 0
+pop pointer 0
+push constant 8
+return
+function Level2.getPlayer2StartDirection 0
+push argument 0
+pop pointer 0
+push constant 1
+return
+function Level2.getPlayer2StartX 0
+push argument 0
+pop pointer 0
+push constant 28
+return
+function Level2.getPlayer2StartY 0
+push argument 0
+pop pointer 0
+push constant 9
+return
+function Level2.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return

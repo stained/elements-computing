@@ -1,0 +1,190 @@
+class Level2
+{
+	field Array levelDefinition;
+
+	constructor Level2 new(int levelDefinitionPointer)
+	{
+		// general iterator
+		var int i;		
+
+		let levelDefinition = levelDefinitionPointer;
+
+		// Level:
+		// 0 = empty, 1 = concrete, 2 = steel, x = player1 start, y = player2 start, 
+		// top two rows are typically for header (set in level.jack)
+		// sprite offset on screen = col + (row * 512)
+		// 
+		// 0 -  00000000000000000000000000000000	levelDefinition[0-31]
+		// 1 -  00000000000000000000000000000000 	levelDefinition[32-63]		
+		// 2 -  22222222222222222222222222222222	levelDefinition[64-95]
+		// 3 -  20000000000000000000000000000002	levelDefinition[96-127]
+		// 4 -  20000000000001000010000000000002	levelDefinition[128-159]
+		// 5 -  20000000000001122110000000000002	levelDefinition[160-191]
+		// 6 -  20011110000000000000000001111002	levelDefinition[192-223]
+		// 7 -  20000110000000000000000001100002	levelDefinition[224-255]
+		// 8 -  200x0200000000011000000000200002	levelDefinition[256-287]
+		// 9 -  2000020000000001100000000020y002	levelDefinition[288-319]
+		// 10 - 20000110000000000000000001100002	levelDefinition[320-351]
+		// 11 - 20011110000000000000000001111002	levelDefinition[352-382]
+		// 12 - 20000000000001122110000000000002	levelDefinition[384-415]
+		// 13 - 20000000000001000010000000000002	levelDefinition[416-447]
+		// 14 - 20000000000000000000000000000002	levelDefinition[448-479]
+		// 15 - 22222222222222222222222222222222	levelDefinition[480-511]
+		// 
+
+		let i = 0;
+
+		// *******************************
+		// Draw Stage
+		// *******************************
+
+		// build row 2 + 15 (top + bottom walls)
+		while (i < 32) {
+			// row 2
+			let levelDefinition[Level.getSpriteIndex(i, 2)] = LevelSprite.newSteelWall(i, 2);
+
+			// row 15
+			let levelDefinition[Level.getSpriteIndex(i, 15)] = LevelSprite.newSteelWall(i, 15);
+			let i = i + 1;
+		}
+
+		// row 3 - 14, columns 0 + 31
+		let i = 3;
+		while (i < 15) {
+			// left + right walls
+			let levelDefinition[Level.getSpriteIndex(0, i)] = LevelSprite.newSteelWall(0, i);
+			let levelDefinition[Level.getSpriteIndex(31, i)] = LevelSprite.newSteelWall(31, i);
+
+			let i = i + 1;
+		}
+
+		// remaining steel walls (remaining 2 values in map above)
+		let levelDefinition[Level.getSpriteIndex(15, 5)] = LevelSprite.newSteelWall(15, 5);
+		let levelDefinition[Level.getSpriteIndex(16, 5)] = LevelSprite.newSteelWall(16, 5);
+		let levelDefinition[Level.getSpriteIndex(15, 12)] = LevelSprite.newSteelWall(15, 12);
+		let levelDefinition[Level.getSpriteIndex(16, 12)] = LevelSprite.newSteelWall(16, 12);
+		let levelDefinition[Level.getSpriteIndex(5, 8)] = LevelSprite.newSteelWall(5, 8);
+		let levelDefinition[Level.getSpriteIndex(5, 9)] = LevelSprite.newSteelWall(5, 9);
+		let levelDefinition[Level.getSpriteIndex(26, 8)] = LevelSprite.newSteelWall(26, 8);
+		let levelDefinition[Level.getSpriteIndex(26, 9)] = LevelSprite.newSteelWall(26, 9);
+
+		// some concrete [breakable] walls (all 1 values in map above)
+		let levelDefinition[Level.getSpriteIndex(13, 4)] = LevelSprite.newConcreteWall(13, 4);
+		let levelDefinition[Level.getSpriteIndex(18, 4)] = LevelSprite.newConcreteWall(18, 4);
+		let levelDefinition[Level.getSpriteIndex(13, 5)] = LevelSprite.newConcreteWall(13, 5);
+		let levelDefinition[Level.getSpriteIndex(18, 5)] = LevelSprite.newConcreteWall(18, 5);
+		let levelDefinition[Level.getSpriteIndex(14, 5)] = LevelSprite.newConcreteWall(14, 5);
+		let levelDefinition[Level.getSpriteIndex(17, 5)] = LevelSprite.newConcreteWall(17, 5);
+		let levelDefinition[Level.getSpriteIndex(13, 13)] = LevelSprite.newConcreteWall(13, 13);
+		let levelDefinition[Level.getSpriteIndex(18, 13)] = LevelSprite.newConcreteWall(18, 13);
+		let levelDefinition[Level.getSpriteIndex(13, 12)] = LevelSprite.newConcreteWall(13, 12);
+		let levelDefinition[Level.getSpriteIndex(18, 12)] = LevelSprite.newConcreteWall(18, 12);
+		let levelDefinition[Level.getSpriteIndex(14, 12)] = LevelSprite.newConcreteWall(14, 12);
+		let levelDefinition[Level.getSpriteIndex(17, 12)] = LevelSprite.newConcreteWall(17, 12);		
+		let levelDefinition[Level.getSpriteIndex(15, 8)] = LevelSprite.newConcreteWall(15, 8);
+		let levelDefinition[Level.getSpriteIndex(16, 8)] = LevelSprite.newConcreteWall(16, 8);
+		let levelDefinition[Level.getSpriteIndex(15, 9)] = LevelSprite.newConcreteWall(15, 9);
+		let levelDefinition[Level.getSpriteIndex(16, 9)] = LevelSprite.newConcreteWall(16, 9);
+		let levelDefinition[Level.getSpriteIndex(3, 6)] = LevelSprite.newConcreteWall(3, 6);
+		let levelDefinition[Level.getSpriteIndex(4, 6)] = LevelSprite.newConcreteWall(4, 6);
+		let levelDefinition[Level.getSpriteIndex(5, 6)] = LevelSprite.newConcreteWall(5, 6);
+		let levelDefinition[Level.getSpriteIndex(6, 6)] = LevelSprite.newConcreteWall(6, 6);
+		let levelDefinition[Level.getSpriteIndex(5, 7)] = LevelSprite.newConcreteWall(5, 7);
+		let levelDefinition[Level.getSpriteIndex(6, 7)] = LevelSprite.newConcreteWall(6, 7);
+		let levelDefinition[Level.getSpriteIndex(5, 10)] = LevelSprite.newConcreteWall(5, 10);
+		let levelDefinition[Level.getSpriteIndex(6, 10)] = LevelSprite.newConcreteWall(6, 10);
+		let levelDefinition[Level.getSpriteIndex(3, 11)] = LevelSprite.newConcreteWall(3, 11);
+		let levelDefinition[Level.getSpriteIndex(4, 11)] = LevelSprite.newConcreteWall(4, 11);
+		let levelDefinition[Level.getSpriteIndex(5, 11)] = LevelSprite.newConcreteWall(5, 11);
+		let levelDefinition[Level.getSpriteIndex(6, 11)] = LevelSprite.newConcreteWall(6, 11);
+
+		let levelDefinition[Level.getSpriteIndex(25, 6)] = LevelSprite.newConcreteWall(25, 6);
+		let levelDefinition[Level.getSpriteIndex(26, 6)] = LevelSprite.newConcreteWall(26, 6);
+		let levelDefinition[Level.getSpriteIndex(27, 6)] = LevelSprite.newConcreteWall(27, 6);
+		let levelDefinition[Level.getSpriteIndex(28, 6)] = LevelSprite.newConcreteWall(28, 6);
+		let levelDefinition[Level.getSpriteIndex(25, 7)] = LevelSprite.newConcreteWall(25, 7);
+		let levelDefinition[Level.getSpriteIndex(26, 7)] = LevelSprite.newConcreteWall(26, 7);
+		let levelDefinition[Level.getSpriteIndex(25, 10)] = LevelSprite.newConcreteWall(25, 10);
+		let levelDefinition[Level.getSpriteIndex(26, 10)] = LevelSprite.newConcreteWall(26, 10);
+		let levelDefinition[Level.getSpriteIndex(25, 11)] = LevelSprite.newConcreteWall(25, 11);
+		let levelDefinition[Level.getSpriteIndex(26, 11)] = LevelSprite.newConcreteWall(26, 11);
+		let levelDefinition[Level.getSpriteIndex(27, 11)] = LevelSprite.newConcreteWall(27, 11);
+		let levelDefinition[Level.getSpriteIndex(28, 11)] = LevelSprite.newConcreteWall(28, 11);
+
+
+		return this;
+	}
+
+	/**
+	 * Limit distance (number of sprites) the bullet travels in this level
+	 * Between 1 and 32
+	 */
+	method int getMaxShootingDistance()
+	{
+		return 10;
+	}
+
+	/**
+	 * Number of moves per player turn
+	 */
+	method int getMovesPerTurn()
+	{
+		return 15;
+	}
+
+	/**
+	 * Get Player 1 start direction
+	 */
+	method int getPlayer1StartDirection()
+	{
+		// right
+		return 0;
+	}
+
+	/**
+	 * Get Player 1 start offset X
+	 */
+	method int getPlayer1StartX()
+	{
+		return 3;
+	} 
+
+	/**
+	 * Get Player 1 start offset Y
+	 */
+	method int getPlayer1StartY()
+	{
+		return 8;
+	} 
+
+	/**
+	 * Get Player 2 start direction
+	 */
+	method int getPlayer2StartDirection()
+	{
+		// left
+		return 1;
+	}
+
+	/**
+	 * Get Player 2 start offset X
+	 */
+	method int getPlayer2StartX()
+	{
+		return 28;
+	} 
+
+	/**
+	 * Get Player 2 start offset Y
+	 */
+	method int getPlayer2StartY()
+	{
+		return 9;
+	} 		
+
+	method void dispose()
+	{
+		do Memory.deAlloc(this);
+		return;
+	}
+}

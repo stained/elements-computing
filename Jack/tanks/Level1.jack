@@ -11,7 +11,6 @@ class Level1
 
 		// Level:
 		// 0 = empty, 1 = concrete, 2 = steel, x = player1 start, y = player2 start, 
-		// a=player1 score, b=player2 score
 		// sprite offset on screen = col + (row * 512)
 		// 
 		// 0 -  00000000000000000000000000000000	levelDefinition[0-31]

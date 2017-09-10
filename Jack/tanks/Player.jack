@@ -17,16 +17,26 @@ class Player
 	/**
 	 * Create a new Player [1/2] at location, passing a reference to the current tank game object
 	 */
-	constructor Player new(Tankgame currentTankGame, int playerNumber, int xOffset, int yOffset, int direction)
+	constructor Player new(Tankgame currentTankGame, int playerNumber)
 	{
 		let currentDirection = 0;
 		let alternativeFrame = false;
 		let tankGame = currentTankGame;
-		let x = xOffset;
-		let y = yOffset;
-		let currentDirection = direction;
 		let player = playerNumber;
 		return this;
+	}
+
+	/**
+	 * remove tank sprite from screen
+	 */ 
+	method void remove()
+	{
+		var int offset;
+		let offset = x + (y * 512);
+		do clear(offset);
+		let x = 0;
+		let y = 0;
+		return;
 	}
 
 	/**

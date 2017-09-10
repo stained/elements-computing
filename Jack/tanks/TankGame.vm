@@ -4,42 +4,52 @@ call Memory.alloc 1
 pop pointer 0
 call Level.new 0
 pop this 0
-push this 0
-call Level.getMaxShootingDistance 1
-pop this 6
-push this 0
-call Level.draw 1
-pop temp 0
 push pointer 0
 push constant 1
-push this 0
-call Level.getPlayer1StartX 1
-push this 0
-call Level.getPlayer1StartY 1
-push this 0
-call Level.getPlayer1StartDirection 1
-call Player.new 5
+call Player.new 2
 pop this 1
 push pointer 0
 push constant 2
-push this 0
-call Level.getPlayer2StartX 1
-push this 0
-call Level.getPlayer2StartY 1
-push this 0
-call Level.getPlayer2StartDirection 1
-call Player.new 5
+call Player.new 2
 pop this 2
 push pointer 0
+push constant 1
+call TankGame.loadLevel 2
+pop temp 0
+push pointer 0
+return
+function TankGame.loadLevel 0
+push argument 0
+pop pointer 0
+push this 0
+push argument 1
+call Level.loadLevel 2
+pop temp 0
+push this 0
+call Level.getMaxShootingDistance 1
+pop this 6
+push constant 0
+not
+pop this 3
+push pointer 0
+call TankGame.updateMovesRemaining 1
+pop temp 0
+push pointer 0
 call TankGame.resetScore 1
+pop temp 0
+push this 1
+call Player.remove 1
+pop temp 0
+push this 2
+call Player.remove 1
+pop temp 0
+push this 0
+call Level.draw 1
 pop temp 0
 push pointer 0
 call TankGame.resetPlayerPositions 1
 pop temp 0
 push constant 0
-not
-pop this 3
-push pointer 0
 return
 function TankGame.getMaxShootingDistance 0
 push argument 0
@@ -99,7 +109,7 @@ function TankGame.updateMovesRemaining 0
 push argument 0
 pop pointer 0
 push constant 1
-push constant 18
+push constant 19
 call Output.moveCursor 2
 pop temp 0
 push constant 34
@@ -175,7 +185,7 @@ call String.appendChar 2
 call Main.printString 1
 pop temp 0
 push constant 1
-push constant 18
+push constant 19
 call Output.moveCursor 2
 pop temp 0
 push this 3
@@ -875,43 +885,59 @@ not
 pop local 0
 goto IF_END0
 label IF_FALSE0
-push this 4
-not
+push local 1
+push constant 90
+eq
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
-push constant 0
-pop this 9
-push this 3
+push pointer 0
+push this 0
+call Level.getCurrentLevel 1
+push constant 1
+add
+call TankGame.loadLevel 2
+pop temp 0
+goto IF_END1
+label IF_FALSE1
+push this 4
+not
 if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
+push constant 0
+pop this 9
+push this 3
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
 push this 1
 push local 1
 call Player.keyPressed 2
 pop temp 0
-goto IF_END2
-label IF_FALSE2
+goto IF_END3
+label IF_FALSE3
 push this 2
 push local 1
 call Player.keyPressed 2
 pop temp 0
-label IF_END2
+label IF_END3
 push pointer 0
 call TankGame.decrementAndCheckMovesRemaining 1
 pop temp 0
-goto IF_END1
-label IF_FALSE1
+goto IF_END2
+label IF_FALSE2
 push local 1
 push constant 128
 eq
-if-goto IF_TRUE3
-goto IF_FALSE3
-label IF_TRUE3
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
 push pointer 0
 call TankGame.nextTurn 1
 pop temp 0
-label IF_FALSE3
+label IF_FALSE4
+label IF_END2
 label IF_END1
 label WHILE_EXP2
 push local 1

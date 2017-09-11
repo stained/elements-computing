@@ -13,7 +13,7 @@ push constant 2
 call Player.new 2
 pop this 2
 push pointer 0
-push constant 1
+push constant 0
 call TankGame.loadLevel 2
 pop temp 0
 push pointer 0
@@ -21,6 +21,8 @@ return
 function TankGame.loadLevel 0
 push argument 0
 pop pointer 0
+call Screen.clearScreen 0
+pop temp 0
 push this 0
 push argument 1
 call Level.loadLevel 2
@@ -708,11 +710,13 @@ call Main.printString 1
 pop temp 0
 push constant 0
 return
-function TankGame.detectPlayerCollision 1
+function TankGame.detectPlayerCollision 2
 push argument 0
 pop pointer 0
 push constant 0
 pop local 0
+push constant 0
+pop local 1
 push this 3
 if-goto IF_TRUE0
 goto IF_FALSE0
@@ -722,6 +726,16 @@ push argument 1
 push argument 2
 call Player.detectCollision 3
 pop local 0
+push argument 3
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 1
+push argument 1
+push argument 2
+call Player.detectCollision 3
+pop local 1
+label IF_FALSE1
 goto IF_END0
 label IF_FALSE0
 push this 1
@@ -729,18 +743,45 @@ push argument 1
 push argument 2
 call Player.detectCollision 3
 pop local 0
+push argument 3
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push this 2
+push argument 1
+push argument 2
+call Player.detectCollision 3
+pop local 1
+label IF_FALSE2
 label IF_END0
 push argument 3
 push local 0
 and
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
 push pointer 0
 call TankGame.playerKilled 1
 pop temp 0
-label IF_FALSE1
 push local 0
+return
+label IF_FALSE3
+push argument 3
+push local 1
+and
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push this 3
+not
+pop this 3
+push pointer 0
+call TankGame.playerKilled 1
+pop temp 0
+label IF_FALSE4
+push local 0
+push local 1
+or
 return
 function TankGame.resetPlayerPositions 0
 push argument 0
@@ -843,6 +884,23 @@ eq
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
+push this 3
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push this 1
+push argument 1
+push argument 2
+call Player.explodeBulletWithSprite 3
+pop temp 0
+goto IF_END2
+label IF_FALSE2
+push this 2
+push argument 1
+push argument 2
+call Player.explodeBulletWithSprite 3
+pop temp 0
+label IF_END2
 push this 0
 push argument 1
 push argument 2
@@ -900,43 +958,56 @@ call TankGame.loadLevel 2
 pop temp 0
 goto IF_END1
 label IF_FALSE1
-push this 4
-not
+push local 1
+push constant 88
+eq
 if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
+push pointer 0
 push constant 0
-pop this 9
-push this 3
+call TankGame.loadLevel 2
+pop temp 0
+goto IF_END2
+label IF_FALSE2
+push this 4
+not
 if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
+push constant 0
+pop this 9
+push this 3
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
 push this 1
 push local 1
 call Player.keyPressed 2
 pop temp 0
-goto IF_END3
-label IF_FALSE3
+goto IF_END4
+label IF_FALSE4
 push this 2
 push local 1
 call Player.keyPressed 2
 pop temp 0
-label IF_END3
+label IF_END4
 push pointer 0
 call TankGame.decrementAndCheckMovesRemaining 1
 pop temp 0
-goto IF_END2
-label IF_FALSE2
+goto IF_END3
+label IF_FALSE3
 push local 1
 push constant 128
 eq
-if-goto IF_TRUE4
-goto IF_FALSE4
-label IF_TRUE4
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
 push pointer 0
 call TankGame.nextTurn 1
 pop temp 0
-label IF_FALSE4
+label IF_FALSE5
+label IF_END3
 label IF_END2
 label IF_END1
 label WHILE_EXP2

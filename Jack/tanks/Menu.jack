@@ -1,0 +1,258 @@
+/**
+ * Menu layout and properties
+ *
+ * Menu is essentially implemented as a special level
+ */
+class Menu
+{
+	field Array levelDefinition;
+
+	constructor Menu new(int levelDefinitionPointer)
+	{
+		var int i;
+
+		let levelDefinition = levelDefinitionPointer;
+
+		// Level:
+		// 0 = empty, 1 = concrete, 2 = steel, x = player1 start, y = player2 start, 
+		// top two rows are typically for header (set in level.jack)
+		// sprite offset on screen = col + (row * 512)
+		// 
+		// 0 -  00000000000000000000000000000000	levelDefinition[0-31]				
+		// 1 -  00000000000000000000000000000000	levelDefinition[32-63]				
+		// 2 -  00111110011111000110010001000100	levelDefinition[64-95]				
+		// 3 -  00001000000100000110010001000100	levelDefinition[96-127] 			
+		// 4 -  00x01000000100000101010000111000	levelDefinition[128-159] 	 		
+		// 5 -  00001000000100000100110000010000	levelDefinition[160-191]
+		// 6 -  00001000011111000100110000010000	levelDefinition[192-223]
+		// 7 -  00000000000000000000000000000000	levelDefinition[224-255]
+		// 8 -  00111110001000110010100101111100	levelDefinition[256-287]
+		// 9 -  00001000011100110010101001000000	levelDefinition[288-319]
+		// 10 - 00001000010100101010110001111100	levelDefinition[320-351]
+		// 11 - 0000100011111010011010100y000100	levelDefinition[352-382]
+		// 12 - 00001000100010100110100101111100	levelDefinition[384-415]
+		// 13 - 00000000000000000000000000000000	levelDefinition[416-447]
+		// 14 - 00000000000000000000000000000000	levelDefinition[448-479]
+		// 15 - 00000000000000000000000000000000	levelDefinition[480-511]
+		// 
+
+		// *******************************
+		// Draw Stage
+		// *******************************
+
+		// TINY
+		do drawT(2, 2);
+		do drawI(9, 2);
+		do drawN(17, 2);
+		do drawY(25, 2);
+
+		// TANKS
+		do drawT(2, 8);
+		do drawA(8, 8);
+		do drawN(14, 8);
+		do drawK(20, 8);
+		do drawS(25, 8);
+
+		// instructions
+		do Output.moveCursor(21, 13);
+		do Main.printString("[cursor keys] to move, [space] to shoot");
+		do Output.moveCursor(22, 11);
+		do Main.printString("[Q] to quit, [Z] next level, [X] this menu");
+
+		return this;
+	}
+
+	method void drawT(int startX, int startY)
+	{
+		let levelDefinition[Level.getSpriteIndex(startX, startY)] = LevelSprite.newConcreteWall(startX, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 1, startY)] = LevelSprite.newConcreteWall(startX + 1, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY)] = LevelSprite.newConcreteWall(startX + 2, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY)] = LevelSprite.newConcreteWall(startX + 3, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY)] = LevelSprite.newConcreteWall(startX + 4, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 1)] = LevelSprite.newConcreteWall(startX + 2, startY + 1);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 2)] = LevelSprite.newConcreteWall(startX + 2, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 3)] = LevelSprite.newConcreteWall(startX + 2, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 4)] = LevelSprite.newConcreteWall(startX + 2, startY + 4);
+		return;
+	}
+
+	method void drawI(int startX, int startY)
+	{
+		let levelDefinition[Level.getSpriteIndex(startX, startY)] = LevelSprite.newConcreteWall(startX, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 1, startY)] = LevelSprite.newConcreteWall(startX + 1, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY)] = LevelSprite.newConcreteWall(startX + 2, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY)] = LevelSprite.newConcreteWall(startX + 3, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY)] = LevelSprite.newConcreteWall(startX + 4, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 1)] = LevelSprite.newConcreteWall(startX + 2, startY + 1);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 2)] = LevelSprite.newConcreteWall(startX + 2, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 3)] = LevelSprite.newConcreteWall(startX + 2, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 4)] = LevelSprite.newConcreteWall(startX, startY + 4);
+		let levelDefinition[Level.getSpriteIndex(startX + 1, startY + 4)] = LevelSprite.newConcreteWall(startX + 1, startY + 4);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 4)] = LevelSprite.newConcreteWall(startX + 2, startY + 4);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY + 4)] = LevelSprite.newConcreteWall(startX + 3, startY + 4);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY + 4)] = LevelSprite.newConcreteWall(startX + 4, startY + 4);
+		return;
+	}
+
+	method void drawN(int startX, int startY)
+	{
+		let levelDefinition[Level.getSpriteIndex(startX, startY)] = LevelSprite.newConcreteWall(startX, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 1, startY)] = LevelSprite.newConcreteWall(startX + 1, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY)] = LevelSprite.newConcreteWall(startX + 4, startY);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 1)] = LevelSprite.newConcreteWall(startX, startY + 1);
+		let levelDefinition[Level.getSpriteIndex(startX + 1, startY + 1)] = LevelSprite.newConcreteWall(startX + 1, startY + 1);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY + 1)] = LevelSprite.newConcreteWall(startX + 4, startY + 1);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 2)] = LevelSprite.newConcreteWall(startX, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 2)] = LevelSprite.newConcreteWall(startX + 2, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY + 2)] = LevelSprite.newConcreteWall(startX + 4, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 3)] = LevelSprite.newConcreteWall(startX, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY + 3)] = LevelSprite.newConcreteWall(startX + 3, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY + 3)] = LevelSprite.newConcreteWall(startX + 4, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 4)] = LevelSprite.newConcreteWall(startX, startY + 4);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY + 4)] = LevelSprite.newConcreteWall(startX + 3, startY + 4);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY + 4)] = LevelSprite.newConcreteWall(startX + 4, startY + 4);	
+		return;
+	}
+
+	method void drawY(int startX, int startY)
+	{
+		let levelDefinition[Level.getSpriteIndex(startX, startY)] = LevelSprite.newConcreteWall(startX, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY)] = LevelSprite.newConcreteWall(startX + 4, startY);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 1)] = LevelSprite.newConcreteWall(startX, startY + 1);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY + 1)] = LevelSprite.newConcreteWall(startX + 4, startY + 1);
+		let levelDefinition[Level.getSpriteIndex(startX + 1, startY + 2)] = LevelSprite.newConcreteWall(startX + 1, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 2)] = LevelSprite.newConcreteWall(startX + 2, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY + 2)] = LevelSprite.newConcreteWall(startX + 3, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 3)] = LevelSprite.newConcreteWall(startX + 2, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 4)] = LevelSprite.newConcreteWall(startX + 2, startY + 4);
+		return;
+	}
+
+	method void drawA(int startX, int startY)
+	{
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY)] = LevelSprite.newConcreteWall(startX + 2, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 1, startY + 1)] = LevelSprite.newConcreteWall(startX + 1, startY + 1);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 1)] = LevelSprite.newConcreteWall(startX + 2, startY + 1);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY + 1)] = LevelSprite.newConcreteWall(startX + 3, startY + 1);
+		let levelDefinition[Level.getSpriteIndex(startX + 1, startY + 2)] = LevelSprite.newConcreteWall(startX + 1, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY + 2)] = LevelSprite.newConcreteWall(startX + 3, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 3)] = LevelSprite.newConcreteWall(startX, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX + 1, startY + 3)] = LevelSprite.newConcreteWall(startX + 1, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 3)] = LevelSprite.newConcreteWall(startX + 2, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY + 3)] = LevelSprite.newConcreteWall(startX + 3, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY + 3)] = LevelSprite.newConcreteWall(startX + 4, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 4)] = LevelSprite.newConcreteWall(startX, startY + 4);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY + 4)] = LevelSprite.newConcreteWall(startX + 4, startY + 4);
+		return;
+	}	
+
+	method void drawK(int startX, int startY)
+	{
+		let levelDefinition[Level.getSpriteIndex(startX, startY)] = LevelSprite.newConcreteWall(startX, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY)] = LevelSprite.newConcreteWall(startX + 3, startY);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 1)] = LevelSprite.newConcreteWall(startX, startY + 1);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 1)] = LevelSprite.newConcreteWall(startX + 2, startY + 1);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 2)] = LevelSprite.newConcreteWall(startX, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 1, startY + 2)] = LevelSprite.newConcreteWall(startX + 1, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 3)] = LevelSprite.newConcreteWall(startX, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 3)] = LevelSprite.newConcreteWall(startX + 2, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 4)] = LevelSprite.newConcreteWall(startX, startY + 4);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY + 4)] = LevelSprite.newConcreteWall(startX + 3, startY + 4);
+		return;
+	}
+
+	method void drawS(int startX, int startY)
+	{
+		let levelDefinition[Level.getSpriteIndex(startX, startY)] = LevelSprite.newConcreteWall(startX, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 1, startY)] = LevelSprite.newConcreteWall(startX + 1, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY)] = LevelSprite.newConcreteWall(startX + 2, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY)] = LevelSprite.newConcreteWall(startX + 3, startY);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY)] = LevelSprite.newConcreteWall(startX + 4, startY);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 1)] = LevelSprite.newConcreteWall(startX, startY + 1);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 2)] = LevelSprite.newConcreteWall(startX, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 1, startY + 2)] = LevelSprite.newConcreteWall(startX + 1, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 2)] = LevelSprite.newConcreteWall(startX + 2, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY + 2)] = LevelSprite.newConcreteWall(startX + 3, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY + 2)] = LevelSprite.newConcreteWall(startX + 4, startY + 2);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY + 3)] = LevelSprite.newConcreteWall(startX + 4, startY + 3);
+		let levelDefinition[Level.getSpriteIndex(startX, startY + 4)] = LevelSprite.newConcreteWall(startX, startY + 4);
+		let levelDefinition[Level.getSpriteIndex(startX + 1, startY + 4)] = LevelSprite.newConcreteWall(startX + 1, startY + 4);
+		let levelDefinition[Level.getSpriteIndex(startX + 2, startY + 4)] = LevelSprite.newConcreteWall(startX + 2, startY + 4);
+		let levelDefinition[Level.getSpriteIndex(startX + 3, startY + 4)] = LevelSprite.newConcreteWall(startX + 3, startY + 4);
+		let levelDefinition[Level.getSpriteIndex(startX + 4, startY + 4)] = LevelSprite.newConcreteWall(startX + 4, startY + 4);
+		return;
+	}
+
+	/**
+	 * Limit distance (number of sprites) the bullet travels in this level
+	 * Between 1 and 64 (2x stage width)
+	 */
+	method int getMaxShootingDistance()
+	{
+		return 64;
+	}
+
+	/**
+	 * Number of moves per player turn
+	 */
+	method int getMovesPerTurn()
+	{
+		return 15;
+	}
+
+	/**
+	 * Get Player 1 start direction
+	 */
+	method int getPlayer1StartDirection()
+	{
+		// right
+		return 0;
+	}
+
+	/**
+	 * Get Player 1 start offset X
+	 */
+	method int getPlayer1StartX()
+	{
+		return 2;
+	} 
+
+	/**
+	 * Get Player 1 start offset Y
+	 */
+	method int getPlayer1StartY()
+	{
+		return 4;
+	} 
+
+	/**
+	 * Get Player 2 start direction
+	 */
+	method int getPlayer2StartDirection()
+	{
+		// left
+		return 1;
+	}
+
+	/**
+	 * Get Player 2 start offset X
+	 */
+	method int getPlayer2StartX()
+	{
+		return 28;
+	} 
+
+	/**
+	 * Get Player 2 start offset Y
+	 */
+	method int getPlayer2StartY()
+	{
+		return 14;
+	} 		
+
+	method void dispose()
+	{
+		do Memory.deAlloc(this);
+		return;
+	}
+}

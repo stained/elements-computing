@@ -45,8 +45,8 @@ class TankGame
 		// init player2
 		let player2 = Player.new(this, 2);
 
-		// load the first level
-		do loadLevel(1);
+		// load the menu
+		do loadLevel(0);
 
 		return this;
 	}
@@ -57,6 +57,9 @@ class TankGame
 	 */ 
 	method void loadLevel(int levelToLoad)
 	{
+		// clear screen entirely
+		do Screen.clearScreen();
+
 		// load level
 		do level.loadLevel(levelToLoad);
 
@@ -224,22 +227,44 @@ class TankGame
 	method boolean detectPlayerCollision(int x, int y, boolean isShooting)
 	{
 		var boolean collided;
+		var boolean currentPlayerKilled;
+
 		let collided = false;
+		let currentPlayerKilled = false;
 
 		if (player1Turn) {
 			// check against player 2
 			let collided = player2.detectCollision(x, y);
+
+			if (isShooting) {
+				// check against self
+				let currentPlayerKilled = player1.detectCollision(x, y);
+			}
 		} else {
 			// check against player 1
 			let collided = player1.detectCollision(x, y);
+
+			if (isShooting) {
+				// check against self
+				let currentPlayerKilled = player2.detectCollision(x, y);
+			}
 		}
 
 		if (isShooting & collided) {
 			// player got shot, so end round
 			do playerKilled();
+			return collided;
 		} 
 
-		return collided;
+		if (isShooting & currentPlayerKilled)
+		{
+			// handle player killing themself by switching turns
+			let player1Turn = ~player1Turn;
+			do playerKilled();
+		}
+
+
+		return collided | currentPlayerKilled;
 	}
 
 	/**
@@ -303,8 +328,13 @@ class TankGame
 			// TODO, potentially replace with generic "breakable" + "shootToBreakCount" 
 			if (levelItemDetected = 1) {
 				// concrete wall, can be destroyed
+				if (player1Turn) {
+					do player1.explodeBulletWithSprite(x, y);
+				} else {
+					do player2.explodeBulletWithSprite(x, y);
+				} 
 				do level.removeSprite(x, y);
-			}
+			} 
 		}
 
 		return levelItemDetected > 0;
@@ -338,25 +368,31 @@ class TankGame
 					// load next level
 					do loadLevel(level.getCurrentLevel() + 1);	
 				} else  {
-					// player keys
-					if (~playerTurnWaiting) {
-						// pass key through to player objects
-						let newRound = false;
-
-						if (player1Turn) {
-							do player1.keyPressed(key);
-						} else {
-							do player2.keyPressed(key);
-						} 
-
-						// check whether player has moves still this turn
-						do decrementAndCheckMovesRemaining();
+					// X key
+					if (key = 88) {
+						// load main menu
+						do loadLevel(0);	 
 					} else {
-						// check that next player acknowledges turn
-						if (key = 128) {
-							do nextTurn();
-						}
-					}				
+						// player keys
+						if (~playerTurnWaiting) {
+							// pass key through to player objects
+							let newRound = false;
+
+							if (player1Turn) {
+								do player1.keyPressed(key);
+							} else {
+								do player2.keyPressed(key);
+							} 
+
+							// check whether player has moves still this turn
+							do decrementAndCheckMovesRemaining();
+						} else {
+							// check that next player acknowledges turn
+							if (key = 128) {
+								do nextTurn();
+							}
+						}				
+					}
 				}
 
 				// key debounce.

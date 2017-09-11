@@ -7,6 +7,7 @@ class Level
 	field Array levelDefinition;
 
 	// Player start locations and directions
+	// directions: 0 = right, 1 = left, 2 = up, 3 = down
 	field int player1StartDirection;
 	field int player2StartDirection;
 	field int player1StartX;
@@ -31,25 +32,40 @@ class Level
 	{
 		// Level is defined as a collection of 16x16 LevelSprites
 		// 512x256 pixels on the screen equates to 32x16 LevelSprites (or 512 sprites in total)
+		// since a level is mostly empty space this could be significantly reduced (based on the level itself)
+		// but keeping it consistent makes everything else simpler. 
 		let levelDefinition = Array.new(512);
 		let currentLevel = 0;
 
 		return this;
 	}
 
+
 	/**
 	 * Draw level header (score, name, and other info)
 	 */
 	method void drawHeader()
 	{
+		var int startX;
+
+		// don't include the level number on the menu
+		if (currentLevel = 0) {
+			let startX = 21;
+		} else {
+			let startX = 16;
+		}
+
 		// game name + current level
-		do Output.moveCursor(0, 16);
+		do Output.moveCursor(0, startX);
 		do Main.printString("                                     ");
-		do Output.moveCursor(0, 16);
+		do Output.moveCursor(0, startX);
 		do Main.printString("Tiny Turn-based Tanks");
-		do Main.printString(" [Level ");
-		do Output.printInt(currentLevel);
-		do Main.printString("]");
+
+		if (currentLevel > 0) {
+			do Main.printString(" [Level ");
+			do Output.printInt(currentLevel);
+			do Main.printString("]");
+		}
 
 		// player icons
 		let levelDefinition[Level.getSpriteIndex(1, 0)] = LevelSprite.newPlayerIcon(1, 0, 1);				// player 1
@@ -101,7 +117,7 @@ class Level
 	method void loadLevel(int level)
 	{
 		// any invalid level, just load first level
-		if (level < 1 | level > 2) {
+		if (level < 0 | level > 2) {
 			let level = 1;
 		}
 
@@ -109,6 +125,10 @@ class Level
 		do clearLevelDefinition();
 
 		// load level
+		if (level = 0) {
+			do loadMenu();
+		} 
+
 		if (level = 1) {
 			do loadLevel1();
 		} 
@@ -122,6 +142,27 @@ class Level
 		// draw the level header
 		do drawHeader();
 
+		return;
+	}
+
+	method void loadMenu()
+	{
+		// create new menu level
+		var Menu menu;
+		let menu = Menu.new(levelDefinition);
+
+		let player1StartDirection = menu.getPlayer1StartDirection();
+		let player2StartDirection = menu.getPlayer2StartDirection();
+		let player1StartX = menu.getPlayer1StartX();
+		let player1StartY = menu.getPlayer1StartY();
+		let player2StartX = menu.getPlayer2StartX();
+		let player2StartY = menu.getPlayer2StartY();
+
+		let movesPerTurn = menu.getMovesPerTurn();
+		let maxShootingDistance = menu.getMaxShootingDistance();
+
+		// dispose menu object because we have everything we need
+		do menu.dispose();
 		return;
 	}
 
@@ -322,6 +363,7 @@ class Level
 	method void dispose()
 	{
 		do levelDefinition.dispose();
+		do tempSprite.dispose();
 
 		do Memory.deAlloc(this);
 		return;

@@ -176,7 +176,8 @@ class LevelSprite
 
 	method void drawPlayer1Icon(int location) {
 		var int memAddress; 
-		let memAddress = 16384+location;
+		// offset by 256 to align with score text
+		let memAddress = 16384+256+location;
 
 		do Memory.poke(memAddress+0, 0);
 		do Memory.poke(memAddress+32, 960);
@@ -200,7 +201,8 @@ class LevelSprite
 
 	method void drawPlayer2Icon(int location) {
 		var int memAddress; 
-		let memAddress = 16384+location;
+		// offset by 256 to align with score text
+		let memAddress = 16384+256+location;
 
 		do Memory.poke(memAddress+0, 0);
 		do Memory.poke(memAddress+32, 384);

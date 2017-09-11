@@ -474,6 +474,8 @@ function LevelSprite.drawPlayer1Icon 1
 push argument 0
 pop pointer 0
 push constant 16384
+push constant 256
+add
 push argument 1
 add
 pop local 0
@@ -579,6 +581,8 @@ function LevelSprite.drawPlayer2Icon 1
 push argument 0
 pop pointer 0
 push constant 16384
+push constant 256
+add
 push argument 1
 add
 pop local 0

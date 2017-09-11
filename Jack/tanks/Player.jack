@@ -8,6 +8,16 @@ class Player
 	field int x;
 	field int y;
 
+	// tempory storage for 1 sprite area on the screen
+	// used for save / restore operations for bullet animation
+	// we could do something similar for the tank movement as well
+	// perhaps even make a stack of temp sprites, but we'll pretend 
+	// the tank destroys everything it's capable of driving over
+	field Array tempSprite;
+	field bool stateSaved;
+	field int stateSavedX;
+	field int stateSavedY;
+
 	// whether to show normal or alternative frame in movement
 	field bool alternativeFrame;
 
@@ -28,6 +38,11 @@ class Player
 		let player = playerNumber;
 		let x = 0;
 		let y = 0;
+
+
+		// allocate some storage for save/restore operations
+		let tempSprite = Array.new(16);
+
 		return this;
 	}
 
@@ -47,6 +62,38 @@ class Player
 	}
 
 	/**
+	 * Check whether sprite is going off the edge in the X axis
+	 */
+	method int checkSpriteXEdge(int xOffset)
+ 	{
+		if (xOffset < 0) {
+			let xOffset = 31;
+		}
+
+		if (xOffset > 31) {
+			let xOffset = 0;
+		}
+
+		return xOffset;
+ 	}
+
+	/**
+	 * Check whether sprite is going off the edge in the Y axis
+	 */
+	method int checkSpriteYEdge(int yOffset)
+ 	{
+		if (yOffset > 15) {
+			let yOffset = 2;
+		}
+
+		if (yOffset < 2) {
+			let yOffset = 15;
+		}
+
+		return yOffset;
+ 	}
+
+	/**
 	 * Set tank location and direction, then draw
 	 *
 	 * @param int xOffset
@@ -56,16 +103,21 @@ class Player
 	 */ 
 	method void setLocationAndDirection(int xOffset, int yOffset, int direction, boolean fancyLoad)
 	{
+
 		// check if we're colliding with the level geometry or other player
 		if (xOffset = x & yOffset = y) {
 			// we don't need to do detection if we're just turning around
 		} else {
+			// check if we're off the screen edges (0..32, 2..15)
+			let xOffset = checkSpriteXEdge(xOffset);
+			let yOffset = checkSpriteYEdge(yOffset);
+
 			if (tankGame.detectLevelCollision(xOffset, yOffset, false) | tankGame.detectPlayerCollision(xOffset, yOffset, false)) {
+				// can't move to that location
 				return;
 			} 
 		}
 
-		// clear old drawing
 		let currentDirection = -1;
 		do draw();
 
@@ -111,6 +163,8 @@ class Player
 
 		// loop until we hit something
 		while (~shotComplete) {
+			// restore sprite if necessary
+			do restoreSpriteState();
 
 			if (currentDirection = 0) {
 				// facing right
@@ -132,15 +186,25 @@ class Player
  				}
 			}
 
+			let bulletX = checkSpriteXEdge(bulletX);
+			let bulletY = checkSpriteYEdge(bulletY);
+
+			do saveSpriteState(bulletX, bulletY);
+
 			// check whether we've hit the level geometry or other player
 			if (tankGame.detectLevelCollision(bulletX, bulletY, true) | tankGame.detectPlayerCollision(bulletX, bulletY, true)) {
-				do clear(offset);
+				// clear any stored sprite
+				do clearSpriteState();
 				return;
 			}
 
 			// check distance shot travelled
 			if (distanceTravelled = tankGame.getMaxShootingDistance()) {
-				do clear(offset);
+				// do mini explosion
+				do explodeBullet(bulletX, bulletY);
+
+				// restore sprite if necessary
+				do restoreSpriteState();
 				return;
 			}
 
@@ -157,21 +221,40 @@ class Player
 	}
 
 	/**
-	 * Kill player with fancy animation
-	 */ 
-	method void explode()
+	 * Small explosion in empty space
+	 */
+	method void explodeBullet(int bulletX, int bulletY)
 	{
 		var int offset;
-		let offset = x + (y * 512);
-		do drawExplosionFrame0(offset);
-		do Sys.wait(60);
-		do drawExplosionFrame1(offset);
-		do Sys.wait(60);
-		do drawExplosionFrame2(offset);
-		do Sys.wait(60);
+		let offset = bulletX + (bulletY * 512);
+		do drawExplosionFrame2(offset, false);
+		do Sys.wait(30);
+		do drawExplosionFrame1(offset, false);
+		do Sys.wait(30);
 		do clear(offset);
-		do Sys.wait(400);
+		return;
+	}
 
+	/**
+	 * Kill player or level sprite with fancy animation
+	 */ 
+	method void explodeBulletWithSprite(int bulletX, int bulletY)
+	{
+		var int offset;
+		let offset = bulletX + (bulletY * 512);
+		do drawExplosionFrame2(offset, true);
+		do Sys.wait(30);
+		do drawExplosionFrame1(offset, true);
+		do Sys.wait(30);
+		do drawExplosionFrame0(offset, true);
+		do Sys.wait(30);
+		do clear(offset);
+		return;
+	}
+
+	method void explode()
+	{
+		do explodeBullet(x, y);
 		return;
 	}
 
@@ -183,9 +266,9 @@ class Player
 	{
 		var int offset;
 		let offset = x + (y * 512);
-		do drawExplosionFrame0(offset);
+		do drawExplosionFrame0(offset, false);
 		do Sys.wait(60);
-		do drawExplosionFrame1(offset);
+		do drawExplosionFrame1(offset, false);
 		do Sys.wait(60);
 		do clear(offset);
 		do Sys.wait(60);
@@ -686,113 +769,136 @@ class Player
 	*/
 
 	// draw explosion frame over the tank sprite
-	method void drawExplosionFrame0(int location)
+	method void drawExplosionFrame0(int location, boolen combineWithExistingSprite)
 	{
 		var int memAddress; 
-
-		var int memOffset1;
-		var int memOffset2;
-		var int memOffset3;
-		var int memOffset4;
-		var int memOffset5;
-		var int memOffset6;
-		var int memOffset7;
-		var int memOffset8;
-		var int memOffset9;
-		var int memOffset10;
-		var int memOffset11;
-		var int memOffset12;
-		var int memOffset13;
-		var int memOffset14;
-		var int memOffset15;
-		var int memOffset16;
-
-		// get current mem values
 		let memAddress = 16384+location;
-		let memOffset1 = Memory.peek(memAddress+0);
-		let memOffset2 = Memory.peek(memAddress+32);
-		let memOffset3 = Memory.peek(memAddress+64);
-		let memOffset4 = Memory.peek(memAddress+96);
-		let memOffset5 = Memory.peek(memAddress+128);
-		let memOffset6 = Memory.peek(memAddress+160);
-		let memOffset7 = Memory.peek(memAddress+192);
-		let memOffset8 = Memory.peek(memAddress+224);
-		let memOffset9 = Memory.peek(memAddress+256);
-		let memOffset10 = Memory.peek(memAddress+288);
-		let memOffset11 = Memory.peek(memAddress+320);
-		let memOffset12 = Memory.peek(memAddress+352);
-		let memOffset13 = Memory.peek(memAddress+384);
-		let memOffset14 = Memory.peek(memAddress+416);
-		let memOffset15 = Memory.peek(memAddress+448);
-		let memOffset16 = Memory.peek(memAddress+480);
 
-		// combine explosion frame with tank
-		do Memory.poke(memAddress+0, 8576 | memOffset1);
-		do Memory.poke(memAddress+32, 13039 | memOffset2);
-		do Memory.poke(memAddress+64, 13932 | memOffset3);
-		do Memory.poke(memAddress+96, 11375 | memOffset4);
-		do Memory.poke(memAddress+128, 8362 | memOffset5);
-		do Memory.poke(memAddress+160, 24582 | memOffset6);
-		do Memory.poke(memAddress+192, 28676 | memOffset7);
-		do Memory.poke(memAddress+224, 2060 | memOffset8);
-		do Memory.poke(memAddress+256, 1054 | memOffset9);
-		do Memory.poke(memAddress+288, 7960 | memOffset10);
-		do Memory.poke(memAddress+320, 12478 | memOffset11);
-		do Memory.poke(memAddress+352, 24614 | memOffset12);
-		do Memory.poke(memAddress+384, 3966 | memOffset13);
-		do Memory.poke(memAddress+416, 3581 | memOffset14);
-		do Memory.poke(memAddress+448, 23596 | memOffset15);
-		do Memory.poke(memAddress+480, -16124 | memOffset16);		
+		// combine explosion frame with tank by peeking at existing value
+		if (combineWithExistingSprite) {
+			do Memory.poke(memAddress+0, 8576 | Memory.peek(memAddress+0));
+			do Memory.poke(memAddress+32, 13039 | Memory.peek(memAddress+32));
+			do Memory.poke(memAddress+64, 13932 | Memory.peek(memAddress+64));
+			do Memory.poke(memAddress+96, 11375 | Memory.peek(memAddress+96));
+			do Memory.poke(memAddress+128, 8362 | Memory.peek(memAddress+128));
+			do Memory.poke(memAddress+160, 24582 | Memory.peek(memAddress+160));
+			do Memory.poke(memAddress+192, 28676 | Memory.peek(memAddress+192));
+			do Memory.poke(memAddress+224, 2060 | Memory.peek(memAddress+224));
+			do Memory.poke(memAddress+256, 1054 | Memory.peek(memAddress+256));
+			do Memory.poke(memAddress+288, 7960 | Memory.peek(memAddress+288));
+			do Memory.poke(memAddress+320, 12478 | Memory.peek(memAddress+320));
+			do Memory.poke(memAddress+352, 24614 | Memory.peek(memAddress+352));
+			do Memory.poke(memAddress+384, 3966 | Memory.peek(memAddress+384));
+			do Memory.poke(memAddress+416, 3581 | Memory.peek(memAddress+416));
+			do Memory.poke(memAddress+448, 23596 | Memory.peek(memAddress+448));
+			do Memory.poke(memAddress+480, -16124 | Memory.peek(memAddress+480));		
+		} else {
+			do Memory.poke(memAddress+0, 8576);
+			do Memory.poke(memAddress+32, 13039);
+			do Memory.poke(memAddress+64, 13932);
+			do Memory.poke(memAddress+96, 11375);
+			do Memory.poke(memAddress+128, 8362);
+			do Memory.poke(memAddress+160, 24582);
+			do Memory.poke(memAddress+192, 28676);
+			do Memory.poke(memAddress+224, 2060);
+			do Memory.poke(memAddress+256, 1054);
+			do Memory.poke(memAddress+288, 7960);
+			do Memory.poke(memAddress+320, 12478);
+			do Memory.poke(memAddress+352, 24614);
+			do Memory.poke(memAddress+384, 3966);
+			do Memory.poke(memAddress+416, 3581);
+			do Memory.poke(memAddress+448, 23596);
+			do Memory.poke(memAddress+480, -16124);		
+		}
 
 		return;
 	} 
 
-	method void drawExplosionFrame1(int location)
+	method void drawExplosionFrame1(int location, boolen combineWithExistingSprite)
 	{
 		var int memAddress; 
 		let memAddress = 16384+location;
 
-		do Memory.poke(memAddress+0, 0);
-		do Memory.poke(memAddress+32, 0);
-		do Memory.poke(memAddress+64, 0);
-		do Memory.poke(memAddress+96, 128);
-		do Memory.poke(memAddress+128, 128);
-		do Memory.poke(memAddress+160, 3248);
-		do Memory.poke(memAddress+192, 1056);
-		do Memory.poke(memAddress+224, 2064);
-		do Memory.poke(memAddress+256, 1056);
-		do Memory.poke(memAddress+288, 1440);
-		do Memory.poke(memAddress+320, 2064);
-		do Memory.poke(memAddress+352, 0);
-		do Memory.poke(memAddress+384, 0);
-		do Memory.poke(memAddress+416, 0);
-		do Memory.poke(memAddress+448, 0);
-		do Memory.poke(memAddress+480, 0);
+		if (combineWithExistingSprite) {
+			do Memory.poke(memAddress+0, 0 | Memory.peek(memAddress+0));
+			do Memory.poke(memAddress+32, 0 | Memory.peek(memAddress+32));
+			do Memory.poke(memAddress+64, 0 | Memory.peek(memAddress+64));
+			do Memory.poke(memAddress+96, 128 | Memory.peek(memAddress+96));
+			do Memory.poke(memAddress+128, 128 | Memory.peek(memAddress+128));
+			do Memory.poke(memAddress+160, 3248 | Memory.peek(memAddress+160));
+			do Memory.poke(memAddress+192, 1056 | Memory.peek(memAddress+192));
+			do Memory.poke(memAddress+224, 2064 | Memory.peek(memAddress+224));
+			do Memory.poke(memAddress+256, 1056 | Memory.peek(memAddress+256));
+			do Memory.poke(memAddress+288, 1440 | Memory.peek(memAddress+288));
+			do Memory.poke(memAddress+320, 2064 | Memory.peek(memAddress+320));
+			do Memory.poke(memAddress+352, 0 | Memory.peek(memAddress+352));
+			do Memory.poke(memAddress+384, 0 | Memory.peek(memAddress+384));
+			do Memory.poke(memAddress+416, 0 | Memory.peek(memAddress+416));
+			do Memory.poke(memAddress+448, 0 | Memory.peek(memAddress+448));
+			do Memory.poke(memAddress+480, 0 | Memory.peek(memAddress+480));
+		} else {
+			do Memory.poke(memAddress+0, 0);
+			do Memory.poke(memAddress+32, 0);
+			do Memory.poke(memAddress+64, 0);
+			do Memory.poke(memAddress+96, 128);
+			do Memory.poke(memAddress+128, 128);
+			do Memory.poke(memAddress+160, 3248);
+			do Memory.poke(memAddress+192, 1056);
+			do Memory.poke(memAddress+224, 2064);
+			do Memory.poke(memAddress+256, 1056);
+			do Memory.poke(memAddress+288, 1440);
+			do Memory.poke(memAddress+320, 2064);
+			do Memory.poke(memAddress+352, 0);
+			do Memory.poke(memAddress+384, 0);
+			do Memory.poke(memAddress+416, 0);
+			do Memory.poke(memAddress+448, 0);
+			do Memory.poke(memAddress+480, 0);
+		}
 		return;
 	} 
 
 	// draw explosion frame over the tank sprite
-	method void drawExplosionFrame2(int location)
+	method void drawExplosionFrame2(int location, boolen combineWithExistingSprite)
 	{
 		var int memAddress; 
 		let memAddress = 16384+location;
 
-		do Memory.poke(memAddress+0, 0);
-		do Memory.poke(memAddress+32, 0);
-		do Memory.poke(memAddress+64, 0);
-		do Memory.poke(memAddress+96, 0);
-		do Memory.poke(memAddress+128, 0);
-		do Memory.poke(memAddress+160, 0);
-		do Memory.poke(memAddress+192, 544);
-		do Memory.poke(memAddress+224, 512);
-		do Memory.poke(memAddress+256, 32);
-		do Memory.poke(memAddress+288, 512);
-		do Memory.poke(memAddress+320, 0);
-		do Memory.poke(memAddress+352, 0);
-		do Memory.poke(memAddress+384, 0);
-		do Memory.poke(memAddress+416, 0);
-		do Memory.poke(memAddress+448, 0);
-		do Memory.poke(memAddress+480, 0);
+		if (combineWithExistingSprite) {
+			do Memory.poke(memAddress+0, 0 | Memory.peek(memAddress+0));
+			do Memory.poke(memAddress+32, 0 | Memory.peek(memAddress+32));
+			do Memory.poke(memAddress+64, 0 | Memory.peek(memAddress+64));
+			do Memory.poke(memAddress+96, 0 | Memory.peek(memAddress+96));
+			do Memory.poke(memAddress+128, 0 | Memory.peek(memAddress+128));
+			do Memory.poke(memAddress+160, 0 | Memory.peek(memAddress+160));
+			do Memory.poke(memAddress+192, 544 | Memory.peek(memAddress+192));
+			do Memory.poke(memAddress+224, 512 | Memory.peek(memAddress+224));
+			do Memory.poke(memAddress+256, 32 | Memory.peek(memAddress+256));
+			do Memory.poke(memAddress+288, 512 | Memory.peek(memAddress+288));
+			do Memory.poke(memAddress+320, 0 | Memory.peek(memAddress+320));
+			do Memory.poke(memAddress+352, 0 | Memory.peek(memAddress+352));
+			do Memory.poke(memAddress+384, 0 | Memory.peek(memAddress+384));
+			do Memory.poke(memAddress+416, 0 | Memory.peek(memAddress+416));
+			do Memory.poke(memAddress+448, 0 | Memory.peek(memAddress+448));
+			do Memory.poke(memAddress+480, 0 | Memory.peek(memAddress+480));
+		} else {
+			do Memory.poke(memAddress+0, 0);
+			do Memory.poke(memAddress+32, 0);
+			do Memory.poke(memAddress+64, 0);
+			do Memory.poke(memAddress+96, 0);
+			do Memory.poke(memAddress+128, 0);
+			do Memory.poke(memAddress+160, 0);
+			do Memory.poke(memAddress+192, 544);
+			do Memory.poke(memAddress+224, 512);
+			do Memory.poke(memAddress+256, 32);
+			do Memory.poke(memAddress+288, 512);
+			do Memory.poke(memAddress+320, 0);
+			do Memory.poke(memAddress+352, 0);
+			do Memory.poke(memAddress+384, 0);
+			do Memory.poke(memAddress+416, 0);
+			do Memory.poke(memAddress+448, 0);
+			do Memory.poke(memAddress+480, 0);
+		}
+
 		return;
 	} 	
 
@@ -821,6 +927,7 @@ class Player
 
 	method void clear(int location) {
 		var int memAddress; 
+
 		let memAddress = 16384+location;
 		do Memory.poke(memAddress+0, 0);
 		do Memory.poke(memAddress+32, 0);
@@ -841,8 +948,91 @@ class Player
 		return;
 	}	
 
+	/**
+	 * Clear saved sprite
+	 */
+	method void clearSpriteState()
+	{
+		let stateSaved = false;
+		let stateSavedX = 0;
+		let stateSavedY = 0;
+		return;
+	}
+
+	/**
+	 * Save sprite screen memory at x, y temporarily 
+	 */
+	method void saveSpriteState(int x, int y)
+	{
+		var int memAddress; 
+
+		// calculate screen memory location
+		let memAddress = 16384 + x + (y * 512);
+
+		let tempSprite[0] = Memory.peek(memAddress+0);
+		let tempSprite[1] = Memory.peek(memAddress+32);
+		let tempSprite[2] = Memory.peek(memAddress+64);
+		let tempSprite[3] = Memory.peek(memAddress+96);
+		let tempSprite[4] = Memory.peek(memAddress+128);
+		let tempSprite[5] = Memory.peek(memAddress+160);
+		let tempSprite[6] = Memory.peek(memAddress+192);
+		let tempSprite[7] = Memory.peek(memAddress+224);
+		let tempSprite[8] = Memory.peek(memAddress+256);
+		let tempSprite[9] = Memory.peek(memAddress+288);
+		let tempSprite[10] = Memory.peek(memAddress+320);
+		let tempSprite[11] = Memory.peek(memAddress+352);
+		let tempSprite[12] = Memory.peek(memAddress+384);
+		let tempSprite[13] = Memory.peek(memAddress+416);
+		let tempSprite[14] = Memory.peek(memAddress+448);
+		let tempSprite[15] = Memory.peek(memAddress+480);
+
+		let stateSaved = true;
+		let stateSavedX = x;
+		let stateSavedY = y;
+		return;
+	}
+
+	/**
+	 * Restore sprite screen memory at stateSavedX, stateSavedY
+	 * and let the calling method know whether sprite was restored
+	 */
+	method boolean restoreSpriteState()
+	{
+		var int memAddress; 
+
+		if (~stateSaved) {
+			return false;
+		}
+
+		// calculate screen memory location
+		let memAddress = 16384 + stateSavedX + (stateSavedY * 512);
+
+		do Memory.poke(memAddress+0, tempSprite[0]);
+		do Memory.poke(memAddress+32, tempSprite[1]);
+		do Memory.poke(memAddress+64, tempSprite[2]);
+		do Memory.poke(memAddress+96, tempSprite[3]);
+		do Memory.poke(memAddress+128, tempSprite[4]);
+		do Memory.poke(memAddress+160, tempSprite[5]);
+		do Memory.poke(memAddress+192, tempSprite[6]);
+		do Memory.poke(memAddress+224, tempSprite[7]);
+		do Memory.poke(memAddress+256, tempSprite[8]);
+		do Memory.poke(memAddress+288, tempSprite[9]);
+		do Memory.poke(memAddress+320, tempSprite[10]);
+		do Memory.poke(memAddress+352, tempSprite[11]);
+		do Memory.poke(memAddress+384, tempSprite[12]);
+		do Memory.poke(memAddress+416, tempSprite[13]);
+		do Memory.poke(memAddress+448, tempSprite[14]);
+		do Memory.poke(memAddress+480, tempSprite[15]);		
+
+		let stateSaved = false;
+		let stateSavedX = 0;
+		let stateSavedY = 0;
+		return true;
+	}
+
 	method void dispose()
 	{
+		do tempSprite.dispose();
 		do Memory.deAlloc(this);
 		return;
 	}

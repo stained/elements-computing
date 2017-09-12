@@ -1,0 +1,278 @@
+function Level4.new 1
+push constant 1
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+pop this 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push constant 32
+lt
+not
+if-goto WHILE_END0
+push local 0
+push constant 2
+call Level.getSpriteIndex 2
+push this 0
+add
+push local 0
+push constant 2
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 15
+call Level.getSpriteIndex 2
+push this 0
+add
+push local 0
+push constant 15
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 3
+pop local 0
+label WHILE_EXP1
+push local 0
+push constant 15
+lt
+not
+if-goto WHILE_END1
+push constant 15
+push local 0
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 15
+push local 0
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 16
+push local 0
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 16
+push local 0
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP1
+label WHILE_END1
+push constant 4
+pop local 0
+label WHILE_EXP2
+push local 0
+push constant 12
+lt
+not
+if-goto WHILE_END2
+push local 0
+push constant 5
+call Level.getSpriteIndex 2
+push this 0
+add
+push local 0
+push constant 5
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 15
+add
+push constant 5
+call Level.getSpriteIndex 2
+push this 0
+add
+push local 0
+push constant 15
+add
+push constant 5
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 12
+call Level.getSpriteIndex 2
+push this 0
+add
+push local 0
+push constant 12
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 15
+add
+push constant 12
+call Level.getSpriteIndex 2
+push this 0
+add
+push local 0
+push constant 15
+add
+push constant 12
+call LevelSprite.newConcreteWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP2
+label WHILE_END2
+push constant 3
+pop local 0
+label WHILE_EXP3
+push local 0
+push constant 7
+lt
+not
+if-goto WHILE_END3
+push constant 0
+push local 0
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 0
+push local 0
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 31
+push local 0
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 31
+push local 0
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP3
+label WHILE_END3
+push constant 11
+pop local 0
+label WHILE_EXP4
+push local 0
+push constant 15
+lt
+not
+if-goto WHILE_END4
+push constant 0
+push local 0
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 0
+push local 0
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 31
+push local 0
+call Level.getSpriteIndex 2
+push this 0
+add
+push constant 31
+push local 0
+call LevelSprite.newSteelWall 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP4
+label WHILE_END4
+push pointer 0
+return
+function Level4.getMaxShootingDistance 0
+push argument 0
+pop pointer 0
+push constant 20
+return
+function Level4.getMovesPerTurn 0
+push argument 0
+pop pointer 0
+push constant 15
+return
+function Level4.getPlayer1StartDirection 0
+push argument 0
+pop pointer 0
+push constant 1
+return
+function Level4.getPlayer1StartX 0
+push argument 0
+pop pointer 0
+push constant 14
+return
+function Level4.getPlayer1StartY 0
+push argument 0
+pop pointer 0
+push constant 3
+return
+function Level4.getPlayer2StartDirection 0
+push argument 0
+pop pointer 0
+push constant 0
+return
+function Level4.getPlayer2StartX 0
+push argument 0
+pop pointer 0
+push constant 17
+return
+function Level4.getPlayer2StartY 0
+push argument 0
+pop pointer 0
+push constant 14
+return
+function Level4.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return

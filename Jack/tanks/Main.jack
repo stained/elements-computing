@@ -14,8 +14,6 @@ class Main
 	 */ 
 	function void main() 
 	{
-		// TODO main menu + instructions
-
 		// create a new tank game
 		var TankGame tankGame;
 		let tankGame = TankGame.new();

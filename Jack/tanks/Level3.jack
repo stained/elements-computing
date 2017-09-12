@@ -1,0 +1,182 @@
+/**
+ * Level 3 layout and properties
+ */
+class Level3
+{
+	field Array levelDefinition;
+
+	constructor Level3 new(int levelDefinitionPointer)
+	{
+		// general iterator
+		var int i;		
+
+		let levelDefinition = levelDefinitionPointer;
+
+		// Level:
+		// 0 = empty, 1 = concrete, 2 = steel, x = player1 start, y = player2 start, 
+		// top two rows are typically for header (set in level.jack)
+		// sprite offset on screen = col + (row * 512)
+		// 
+		// 0 -  00000000000000000000000000000000	levelDefinition[0-31]
+		// 1 -  00000000000000000000000000000000 	levelDefinition[32-63]		
+		// 2 -  22222222222222222222222222222222	levelDefinition[64-95]
+		// 3 -  20000000000000000000000000000002	levelDefinition[96-127]
+		// 4 -  20000000000000x00000000000000002	levelDefinition[128-159]
+		// 5 -  20000000000000000000000000000002	levelDefinition[160-191]
+		// 6 -  20000222222222111222222222000002	levelDefinition[192-223]
+		// 7 -  00000000000000111000000000000000	levelDefinition[224-255]
+		// 8 -  00000000000000111000000000000000	levelDefinition[256-287]
+		// 9 -  00000000000000111000000000000000	levelDefinition[288-319]
+		// 10 - 00000000000000111000000000000000	levelDefinition[320-351]
+		// 11 - 20000222222222111222222222000002	levelDefinition[352-382]
+		// 12 - 20000000000000000000000000000002	levelDefinition[384-415]
+		// 13 - 2000000000000000y000000000000002	levelDefinition[416-447]
+		// 14 - 20000000000000000000000000000002	levelDefinition[448-479]
+		// 15 - 22222222222222222222222222222222	levelDefinition[480-511]
+		// 
+
+		// *******************************
+		// Draw Stage
+		// *******************************
+
+		// build row 2 + 15 (top + bottom walls)
+		let i = 0;
+		while (i < 32) {
+			// row 2
+			let levelDefinition[Level.getSpriteIndex(i, 2)] = LevelSprite.newSteelWall(i, 2);
+
+			// row 15
+			let levelDefinition[Level.getSpriteIndex(i, 15)] = LevelSprite.newSteelWall(i, 15);
+			let i = i + 1;
+		}
+
+		// center rows of solid steel -- left
+		let i = 5;
+		while (i < 14) {
+			// row 6
+			let levelDefinition[Level.getSpriteIndex(i, 6)] = LevelSprite.newSteelWall(i, 6);
+
+			// row 11
+			let levelDefinition[Level.getSpriteIndex(i, 11)] = LevelSprite.newSteelWall(i, 11);
+			let i = i + 1;
+		}
+
+		// center rows of solid steel -- right
+		let i = 17;
+		while (i < 26) {
+			// row 6
+			let levelDefinition[Level.getSpriteIndex(i, 6)] = LevelSprite.newSteelWall(i, 6);
+
+			// row 11
+			let levelDefinition[Level.getSpriteIndex(i, 11)] = LevelSprite.newSteelWall(i, 11);
+			let i = i + 1;
+		}
+
+		// center columns of concrete
+		let i = 14;
+		while (i < 17) {
+			let levelDefinition[Level.getSpriteIndex(i, 6)] = LevelSprite.newConcreteWall(i, 6);
+			let levelDefinition[Level.getSpriteIndex(i, 7)] = LevelSprite.newConcreteWall(i, 7);
+			let levelDefinition[Level.getSpriteIndex(i, 8)] = LevelSprite.newConcreteWall(i, 8);
+			let levelDefinition[Level.getSpriteIndex(i, 9)] = LevelSprite.newConcreteWall(i, 9);
+			let levelDefinition[Level.getSpriteIndex(i, 10)] = LevelSprite.newConcreteWall(i, 10);
+			let levelDefinition[Level.getSpriteIndex(i, 11)] = LevelSprite.newConcreteWall(i, 11);
+			let i = i + 1;
+		}
+
+		// row 3 - 6 + 11 - 14, columns 0 + 31
+		let i = 3;
+		while (i < 7) {
+			// left + right walls
+			let levelDefinition[Level.getSpriteIndex(0, i)] = LevelSprite.newSteelWall(0, i);
+			let levelDefinition[Level.getSpriteIndex(31, i)] = LevelSprite.newSteelWall(31, i);
+
+			let i = i + 1;
+		}
+
+		let i = 11;
+		while (i < 15) {
+			// left + right walls
+			let levelDefinition[Level.getSpriteIndex(0, i)] = LevelSprite.newSteelWall(0, i);
+			let levelDefinition[Level.getSpriteIndex(31, i)] = LevelSprite.newSteelWall(31, i);
+
+			let i = i + 1;
+		}
+
+
+		return this;
+	}
+
+	/**
+	 * Limit distance (number of sprites) the bullet travels in this level
+	 * Between 1 and 32
+	 */
+	method int getMaxShootingDistance()
+	{
+		return 20;
+	}
+
+	/**
+	 * Number of moves per player turn
+	 */
+	method int getMovesPerTurn()
+	{
+		return 15;
+	}
+
+	/**
+	 * Get Player 1 start direction
+	 */
+	method int getPlayer1StartDirection()
+	{
+		// down
+		return 3;
+	}
+
+	/**
+	 * Get Player 1 start offset X
+	 */
+	method int getPlayer1StartX()
+	{
+		return 14;
+	} 
+
+	/**
+	 * Get Player 1 start offset Y
+	 */
+	method int getPlayer1StartY()
+	{
+		return 4;
+	} 
+
+	/**
+	 * Get Player 2 start direction
+	 */
+	method int getPlayer2StartDirection()
+	{
+		// up
+		return 2;
+	}
+
+	/**
+	 * Get Player 2 start offset X
+	 */
+	method int getPlayer2StartX()
+	{
+		return 16;
+	} 
+
+	/**
+	 * Get Player 2 start offset Y
+	 */
+	method int getPlayer2StartY()
+	{
+		return 13;
+	} 		
+
+	method void dispose()
+	{
+		do Memory.deAlloc(this);
+		return;
+	}
+}

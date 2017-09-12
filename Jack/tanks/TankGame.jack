@@ -357,53 +357,49 @@ class TankGame
 			// waits for a key to be pressed
 			while (key = 0) {
 				let key = Keyboard.keyPressed();
+				do Sys.wait(10);
 			}
 
-			// Q key
-			if (key = 81) { 
+			if (key = 81) { 								// Q key
 				let exit = true; 
-			} else {
-				// Z key
-				if (key = 90) {
-					// load next level
-					do loadLevel(level.getCurrentLevel() + 1);	
-				} else  {
-					// X key
-					if (key = 88) {
-						// load main menu
-						do loadLevel(0);	 
+			} else { if (key = 90) {						// Z key
+				// load last level
+				do loadLevel(level.getCurrentLevel() - 1);	
+			} else { if (key = 88) {						// X key
+				// load next level
+				do loadLevel(level.getCurrentLevel() + 1);	
+			} else  { if (key = 82) {						// R key
+				// load main menu
+				do loadLevel(0);	 
+			} else { 
+				// check if player is currently in a turn
+				if (~playerTurnWaiting) {
+					// pass key through to player objects
+					let newRound = false;
+
+					if (player1Turn) {
+						do player1.keyPressed(key);
 					} else {
-						// player keys
-						if (~playerTurnWaiting) {
-							// pass key through to player objects
-							let newRound = false;
+						do player2.keyPressed(key);
+					} 
 
-							if (player1Turn) {
-								do player1.keyPressed(key);
-							} else {
-								do player2.keyPressed(key);
-							} 
-
-							// check whether player has moves still this turn
-							do decrementAndCheckMovesRemaining();
-						} else {
-							// check that next player acknowledges turn
-							if (key = 128) {
-								do nextTurn();
-							}
-						}				
+					// check whether player has moves still this turn
+					do decrementAndCheckMovesRemaining();
+				} else {
+					// check that next player acknowledges turn
+					if (key = 128) {
+						do nextTurn();
 					}
-				}
+				}				
+			}}}
 
-				// key debounce.
-				// since this is a turn-based game we don't want the player to hold the keys down
-				while (~(key = 0)) {
-					do Sys.wait(40);
-					let key = Keyboard.keyPressed();
-				}
-
+			// key debounce.
+			// since this is a turn-based game we don't want the player to hold the keys down
+			while (~(key = 0)) {
+				do Sys.wait(40);
+				let key = Keyboard.keyPressed();
 			}
-		}
+		}}
 
 		return;
 	}

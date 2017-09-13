@@ -339,14 +339,20 @@ class TankGame
 			// player 1 top, player 2 bottom
 			do player1.setLocationAndDirection(3, 3, 0, true);
 			do player2.setLocationAndDirection(28, 12, 1, true);
+
+			// animate player 1 first
+			do player1.animateTo(13, 6);
+			do player2.animateTo(17, 6);
 		} else {
 			// player 1 bottom, player 2 top
 			do player1.setLocationAndDirection(3, 12, 0, true);
 			do player2.setLocationAndDirection(28, 3, 1, true);
+
+			// animate player 2 first
+			do player2.animateTo(17, 6);
+			do player1.animateTo(13, 6);
 		}
 
-		do player1.animateTo(13, 6);
-		do player2.animateTo(17, 6);
 		do Sys.wait(100);
 
 		if (player1Score > player2Score) {

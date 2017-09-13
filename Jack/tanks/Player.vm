@@ -722,7 +722,7 @@ not
 pop this 7
 push constant 0
 return
-function Player.animateTo 2
+function Player.animateTo 3
 push argument 0
 pop pointer 0
 push this 1
@@ -731,6 +731,8 @@ push constant 512
 call Math.multiply 2
 add
 pop local 0
+push this 0
+pop local 2
 label WHILE_EXP0
 push this 1
 push argument 1
@@ -742,10 +744,6 @@ eq
 not
 not
 if-goto WHILE_END0
-push pointer 0
-push local 0
-call Player.clear 2
-pop temp 0
 push local 1
 not
 if-goto IF_TRUE0
@@ -816,6 +814,25 @@ label IF_FALSE3
 push local 1
 not
 pop local 1
+push local 2
+push this 0
+eq
+not
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push pointer 0
+push local 0
+call Player.drawDirectionalFrame 2
+pop temp 0
+push constant 100
+call Sys.wait 1
+pop temp 0
+label IF_FALSE6
+push pointer 0
+push local 0
+call Player.clear 2
+pop temp 0
 push this 1
 push this 2
 push constant 512

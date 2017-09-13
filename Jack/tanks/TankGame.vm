@@ -853,10 +853,10 @@ call Player.explode 1
 pop temp 0
 label IF_END0
 push this 8
-push constant 1
+push constant 10
 eq
 push this 7
-push constant 1
+push constant 10
 eq
 or
 if-goto IF_TRUE1
@@ -915,6 +915,16 @@ push constant 0
 not
 call Player.setLocationAndDirection 5
 pop temp 0
+push this 1
+push constant 13
+push constant 6
+call Player.animateTo 3
+pop temp 0
+push this 2
+push constant 17
+push constant 6
+call Player.animateTo 3
+pop temp 0
 goto IF_END0
 label IF_FALSE0
 push this 1
@@ -933,17 +943,17 @@ push constant 0
 not
 call Player.setLocationAndDirection 5
 pop temp 0
-label IF_END0
-push this 1
-push constant 13
-push constant 6
-call Player.animateTo 3
-pop temp 0
 push this 2
 push constant 17
 push constant 6
 call Player.animateTo 3
 pop temp 0
+push this 1
+push constant 13
+push constant 6
+call Player.animateTo 3
+pop temp 0
+label IF_END0
 push constant 100
 call Sys.wait 1
 pop temp 0

@@ -392,19 +392,19 @@ class Player
 	/**
 	 * Animate tank to position. 
 	 *
-	 * This isn't using a fancy search algorithm that takes the screen geometry into account, since it's for a once-off effect.
+	 * This isn't using a fancy search algorithm that takes the screen geometry into account, since it's for a once-off effect
 	 * Used for Game Over Screen
 	 */
 	method void animateTo(int toX, int toY)
 	{
 		var int offset;
 		var boolean lastMoveX;
-		let offset = x + (y * 512);
+		var int lastDirection;
 
+		let offset = x + (y * 512);
+		let lastDirection = currentDirection;
 
 		while (~(x = toX & y = toY)) {
-			do clear(offset);
-
 			// first deal with x offset
 			if (~(lastMoveX)) {
 				if (x > toX) {
@@ -430,6 +430,16 @@ class Player
 			// stagger movement between x and y
 			let lastMoveX = ~lastMoveX;
 
+			// change direction if necessary
+			if (~(lastDirection = currentDirection)) {
+				do drawDirectionalFrame(offset);
+				do Sys.wait(100);	
+			}
+
+			// clear last position
+			do clear(offset);
+
+			// calculate new position
 			let offset = x + (y * 512);
 
 			do drawDirectionalFrame(offset);	

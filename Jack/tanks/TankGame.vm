@@ -853,10 +853,10 @@ call Player.explode 1
 pop temp 0
 label IF_END0
 push this 8
-push constant 10
+push constant 1
 eq
 push this 7
-push constant 10
+push constant 1
 eq
 or
 if-goto IF_TRUE1

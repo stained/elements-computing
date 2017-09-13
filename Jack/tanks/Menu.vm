@@ -1856,7 +1856,7 @@ return
 function Menu.getMovesPerTurn 0
 push argument 0
 pop pointer 0
-push constant 12
+push constant 7
 return
 function Menu.getPlayer1StartDirection 0
 push argument 0

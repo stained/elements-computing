@@ -1064,20 +1064,16 @@ pop local 2
 push constant 10
 call Sys.wait 1
 pop temp 0
-push this 10
+push this 11
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push this 11
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
 push this 12
 push constant 10
 eq
-if-goto IF_TRUE2
-goto IF_FALSE2
-label IF_TRUE2
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
 push constant 19
 push constant 6
 call Output.moveCursor 2
@@ -1190,7 +1186,7 @@ push constant 108
 call String.appendChar 2
 call Main.printString 1
 pop temp 0
-label IF_FALSE2
+label IF_FALSE1
 push this 12
 push constant 1
 sub
@@ -1278,9 +1274,9 @@ label WHILE_END2
 push this 12
 push constant 0
 eq
-if-goto IF_TRUE3
-goto IF_FALSE3
-label IF_TRUE3
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
 push constant 0
 pop this 11
 push pointer 0
@@ -1290,24 +1286,38 @@ push constant 1
 add
 call TankGame.loadLevel 2
 pop temp 0
-label IF_FALSE3
-label IF_FALSE1
+label IF_FALSE2
 label IF_FALSE0
 goto WHILE_EXP1
 label WHILE_END1
 push local 2
 push constant 81
 eq
-if-goto IF_TRUE4
-goto IF_FALSE4
-label IF_TRUE4
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
 push constant 0
 not
 pop local 0
+goto IF_END3
+label IF_FALSE3
+push local 2
+push constant 80
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push pointer 0
+push this 0
+call Level.getCurrentLevel 1
+push constant 1
+sub
+call TankGame.loadLevel 2
+pop temp 0
 goto IF_END4
 label IF_FALSE4
 push local 2
-push constant 80
+push constant 78
 eq
 if-goto IF_TRUE5
 goto IF_FALSE5
@@ -1316,13 +1326,13 @@ push pointer 0
 push this 0
 call Level.getCurrentLevel 1
 push constant 1
-sub
+add
 call TankGame.loadLevel 2
 pop temp 0
 goto IF_END5
 label IF_FALSE5
 push local 2
-push constant 78
+push constant 82
 eq
 if-goto IF_TRUE6
 goto IF_FALSE6
@@ -1330,72 +1340,57 @@ label IF_TRUE6
 push pointer 0
 push this 0
 call Level.getCurrentLevel 1
-push constant 1
-add
 call TankGame.loadLevel 2
 pop temp 0
 goto IF_END6
 label IF_FALSE6
-push local 2
-push constant 82
-eq
+push this 10
+not
 if-goto IF_TRUE7
 goto IF_FALSE7
 label IF_TRUE7
-push pointer 0
-push this 0
-call Level.getCurrentLevel 1
-call TankGame.loadLevel 2
-pop temp 0
-goto IF_END7
-label IF_FALSE7
-push this 10
+push this 4
 not
 if-goto IF_TRUE8
 goto IF_FALSE8
 label IF_TRUE8
-push this 4
-not
-if-goto IF_TRUE9
-goto IF_FALSE9
-label IF_TRUE9
 push constant 0
 pop this 9
 push this 3
-if-goto IF_TRUE10
-goto IF_FALSE10
-label IF_TRUE10
+if-goto IF_TRUE9
+goto IF_FALSE9
+label IF_TRUE9
 push this 1
 push local 2
 call Player.keyPressed 2
 pop temp 0
-goto IF_END10
-label IF_FALSE10
+goto IF_END9
+label IF_FALSE9
 push this 2
 push local 2
 call Player.keyPressed 2
 pop temp 0
-label IF_END10
+label IF_END9
 push pointer 0
 call TankGame.decrementAndCheckMovesRemaining 1
 pop temp 0
-goto IF_END9
-label IF_FALSE9
+goto IF_END8
+label IF_FALSE8
 push local 2
 push constant 128
 eq
-if-goto IF_TRUE11
-goto IF_FALSE11
-label IF_TRUE11
+if-goto IF_TRUE10
+goto IF_FALSE10
+label IF_TRUE10
 push pointer 0
 call TankGame.nextTurn 1
 pop temp 0
-label IF_FALSE11
-label IF_END9
-label IF_FALSE8
-label IF_END7
+label IF_FALSE10
+label IF_END8
+label IF_FALSE7
 label IF_END6
 label IF_END5
+label IF_END4
 label WHILE_EXP3
 push local 2
 push constant 0
@@ -1410,7 +1405,7 @@ call Keyboard.keyPressed 0
 pop local 2
 goto WHILE_EXP3
 label WHILE_END3
-label IF_END4
+label IF_END3
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0

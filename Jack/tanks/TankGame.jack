@@ -417,40 +417,37 @@ class TankGame
 				let key = Keyboard.keyPressed();
 				do Sys.wait(10);
 
-				if (gameOver) {
-					// show count down timer while waiting for player input
-					if (countDownStarted) {
-						if (countDown = 10) {
-							// only need to output this when it just started
-							do Output.moveCursor(19, 6);
-							do Main.printString("[Q]uit [P]revious level [N]ext level [R]estart level");
-						}
+				if (countDownStarted) {
+					if (countDown = 10) {
+						// only need to output this when it just started
+						do Output.moveCursor(19, 6);
+						do Main.printString("[Q]uit [P]revious level [N]ext level [R]estart level");
+					}
 
-						let countDown = countDown - 1;
+					let countDown = countDown - 1;
 
-						// show countdown timer
-						do Output.moveCursor(13, 21);
-						do Main.printString("Loading next level in");
-						do Output.moveCursor(16, 31);
-						do Output.printInt(countDown);
+					// show countdown timer
+					do Output.moveCursor(13, 21);
+					do Main.printString("Loading next level in");
+					do Output.moveCursor(16, 31);
+					do Output.printInt(countDown);
 
-						// split wait into pieces so we can capture keypress during countdown
-						let waiting = 0;
+					// split wait into pieces so we can capture keypress during countdown
+					let waiting = 0;
 
-						while ((waiting < 100) & (key = 0)) {
-							do Sys.wait(10);
-							let key = Keyboard.keyPressed();
-							let waiting = waiting + 1;
-						}
+					while ((waiting < 100) & (key = 0)) {
+						do Sys.wait(10);
+						let key = Keyboard.keyPressed();
+						let waiting = waiting + 1;
+					}
 
-						if (countDown = 0) {
-							// countdown reached zero, with no input
-							let countDownStarted = false;
+					if (countDown = 0) {
+						// countdown reached zero, with no input
+						let countDownStarted = false;
 
-							// start next level
-							do loadLevel(level.getCurrentLevel() + 1);	
-						}
-					}		
+						// start next level
+						do loadLevel(level.getCurrentLevel() + 1);	
+					}
 				}		
 			}
 

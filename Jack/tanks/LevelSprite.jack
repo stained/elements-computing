@@ -18,19 +18,23 @@ class LevelSprite
 	// calculated screen memory offset
 	field int offset;
 
+	constructor LevelSprite new(int xOffset, int yOffset, int spriteType) 
+	{
+		let x = xOffset;
+		let y = yOffset;
+		let offset = x + (y * 512);
+		let type = spriteType;
+		return this;
+	}
+
 	/**
 	 * Create a new Steel Wall Level Sprite
 	 * @param int xOffset
 	 * @param int yOffset
 	 */
-	constructor LevelSprite newSteelWall(int xOffset, int yOffset)
+	function LevelSprite newSteelWall(int xOffset, int yOffset)
 	{
-		let x = xOffset;
-		let y = yOffset;
-		let offset = x + (y * 512);
-		let type = 2;
-
-		return this;
+		return LevelSprite.new(xOffset, yOffset, 2);
 	}
 
 	/**
@@ -38,27 +42,17 @@ class LevelSprite
 	 * @param int xOffset
 	 * @param int yOffset
 	 */
-	constructor LevelSprite newConcreteWall(int xOffset, int yOffset)
+	function LevelSprite newConcreteWall(int xOffset, int yOffset)
 	{
-		let x = xOffset;
-		let y = yOffset;
-		let offset = x + (y * 512);
-		let type = 1;
-
-		return this;
+		return LevelSprite.new(xOffset, yOffset, 1);
 	}
 
 	/**
 	 * Create new player icon sprite
 	 */
-	constructor LevelSprite newPlayerIcon(int xOffset, int yOffset, int player)
+	function LevelSprite newPlayerIcon(int xOffset, int yOffset, int player)
 	{
-		let x = xOffset;
-		let y = yOffset;
-		let offset = x + (y * 512);
-		let type = 100 + player;
-
-		return this;
+		return LevelSprite.new(xOffset, yOffset, 100 + player);
 	}
 
 	/**
@@ -94,7 +88,7 @@ class LevelSprite
 	 */ 
 	method void remove()
 	{
-		do clear(offset);
+		do LevelSprite.clear(offset);
 		return;
 	}
 
@@ -152,7 +146,7 @@ class LevelSprite
 		return;
 	}	
 
-	method void clear(int location) {
+	function void clear(int location) {
 		var int memAddress; 
 		let memAddress = 16384+location;
 		do Memory.poke(memAddress+0, 0);

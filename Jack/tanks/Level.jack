@@ -83,6 +83,9 @@ class Level
 		var int pointer;
 		var LevelSprite levelSprite;
 
+		// clear screen entirely
+		do Screen.clearScreen();
+		
 		let i = 0;
 
 		while (i < 512) {
@@ -147,6 +150,23 @@ class Level
 		// draw the level header
 		do drawHeader();
 
+		return;
+	}
+
+	/**
+	 * Draws a game over screen
+	 */
+	method void loadGameOver(int player1Score, int player2Score)
+	{
+		var GameOver gameOver;
+
+		// clear level definition
+		do clearLevelDefinition();
+
+		let gameOver = GameOver.new(levelDefinition, player1Score, player2Score);
+		do gameOver.dispose();
+
+		do draw();
 		return;
 	}
 

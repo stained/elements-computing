@@ -1,4 +1,4 @@
-function LevelSprite.newSteelWall 0
+function LevelSprite.new 0
 push constant 4
 call Memory.alloc 1
 pop pointer 0
@@ -12,47 +12,29 @@ push constant 512
 call Math.multiply 2
 add
 pop this 3
-push constant 2
+push argument 2
 pop this 2
 push pointer 0
+return
+function LevelSprite.newSteelWall 0
+push argument 0
+push argument 1
+push constant 2
+call LevelSprite.new 3
 return
 function LevelSprite.newConcreteWall 0
-push constant 4
-call Memory.alloc 1
-pop pointer 0
 push argument 0
-pop this 0
 push argument 1
-pop this 1
-push this 0
-push this 1
-push constant 512
-call Math.multiply 2
-add
-pop this 3
 push constant 1
-pop this 2
-push pointer 0
+call LevelSprite.new 3
 return
 function LevelSprite.newPlayerIcon 0
-push constant 4
-call Memory.alloc 1
-pop pointer 0
 push argument 0
-pop this 0
 push argument 1
-pop this 1
-push this 0
-push this 1
-push constant 512
-call Math.multiply 2
-add
-pop this 3
 push constant 100
 push argument 2
 add
-pop this 2
-push pointer 0
+call LevelSprite.new 3
 return
 function LevelSprite.draw 0
 push argument 0
@@ -114,9 +96,8 @@ return
 function LevelSprite.remove 0
 push argument 0
 pop pointer 0
-push pointer 0
 push this 3
-call LevelSprite.clear 2
+call LevelSprite.clear 1
 pop temp 0
 push constant 0
 return
@@ -366,10 +347,8 @@ pop temp 0
 push constant 0
 return
 function LevelSprite.clear 1
-push argument 0
-pop pointer 0
 push constant 16384
-push argument 1
+push argument 0
 add
 pop local 0
 push local 0

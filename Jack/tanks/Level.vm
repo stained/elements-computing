@@ -220,6 +220,8 @@ return
 function Level.clearLevelDefinition 3
 push argument 0
 pop pointer 0
+call Screen.clearScreen 0
+pop temp 0
 push constant 0
 pop local 0
 label WHILE_EXP0
@@ -374,6 +376,25 @@ push argument 1
 pop this 9
 push pointer 0
 call Level.drawHeader 1
+pop temp 0
+push constant 0
+return
+function Level.loadGameOver 1
+push argument 0
+pop pointer 0
+push pointer 0
+call Level.clearLevelDefinition 1
+pop temp 0
+push this 0
+push argument 1
+push argument 2
+call GameOver.new 3
+pop local 0
+push local 0
+call GameOver.dispose 1
+pop temp 0
+push pointer 0
+call Level.draw 1
 pop temp 0
 push constant 0
 return

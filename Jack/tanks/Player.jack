@@ -55,8 +55,8 @@ class Player
 		do clear(offset);
 
 		// move it to 0,0 (out of game area)
-		let x = 0;
-		let y = 0;
+		let x = -1;
+		let y = -1;
 		return;
 	}
 
@@ -169,22 +169,16 @@ class Player
 			if (currentDirection = 0) {
 				// facing right
 				let bulletX = bulletX + 1;
-			} else {
-				if (currentDirection = 1) {
-					// facing left
-					let bulletX = bulletX - 1;
- 				} else {
-					if (currentDirection = 2) {
-						// facing up
-						let bulletY = bulletY - 1;
-					} else {
-						if (currentDirection = 3) {
-							// facing down
-							let bulletY = bulletY + 1;
-						}
-					}
- 				}
-			}
+			} else { if (currentDirection = 1) {
+				// facing left
+				let bulletX = bulletX - 1;
+			} else { if (currentDirection = 2) {
+				// facing up
+				let bulletY = bulletY - 1;
+			} else { if (currentDirection = 3) {
+				// facing down
+				let bulletY = bulletY + 1;
+			}}}}
 
 			let bulletX = checkSpriteXEdge(bulletX);
 			let bulletY = checkSpriteYEdge(bulletY);
@@ -359,55 +353,107 @@ class Player
 			do clear(offset);
 		}
 
-		// right
-		if (currentDirection = 0) {
+		do drawDirectionalFrame(offset);
+		return;		
+	}
+
+	method void drawDirectionalFrame(int offset)
+	{
+		if (currentDirection = 0) {								// right
 			if (~alternativeFrame) {
 				do drawFrameRightNormal(offset);
 			} else {
 				do drawFrameRightAlternative(offset);
 			}
-
-			let alternativeFrame = ~alternativeFrame;
-			return;
-		}
-
-		// left
-		if (currentDirection = 1) {
+		} else { if (currentDirection = 1) {					// left
 			if (~alternativeFrame) {
 				do drawFrameLeftNormal(offset);
 			} else {
 				do drawFrameLeftAlternative(offset);
 			}
-
-			let alternativeFrame = ~alternativeFrame;
-			return;
-		}
-
-		// up
-		if (currentDirection = 2) {
+		} else { if (currentDirection = 2) {					// up
 			if (~alternativeFrame) {
 				do drawFrameUpNormal(offset);
 			} else {
 				do drawFrameUpAlternative(offset);
 			}
-
-			let alternativeFrame = ~alternativeFrame;
-			return;
-		}
-
-		// down
-		if (currentDirection = 3) {
+		} else { if (currentDirection = 3) {					// down
 			if (~alternativeFrame) {
 				do drawFrameDownNormal(offset);
 			} else {
 				do drawFrameDownAlternative(offset);
 			}
+		}}}}
 
-			let alternativeFrame = ~alternativeFrame;
-			return;
+		let alternativeFrame = ~alternativeFrame;
+		return;
+	}
+
+	/**
+	 * Animate tank to position, doesn't animate the direction, but that's fine for the single use
+	 * Used for Game Over Screen
+	 */
+	method void animateTo(int toX, int toY)
+	{
+		var int offset;
+		let offset = x + (y * 512);
+
+		while (~(x = toX & y = toY)) {
+			do clear(offset);
+
+			if (x > toX) {
+				let x = x - 1;
+			} else { if (x < toX) {
+				let x = x + 1;
+			}}
+
+			if (y > toY) {
+				let y = y - 1;
+			} else { if (y < toY) {
+				let y = y + 1;
+			}}
+
+			let offset = x + (y * 512);
+
+			do drawDirectionalFrame(offset);	
+			do Sys.wait(100);
 		}
 
-		return;		
+		return;
+	}
+
+	/**
+	 * Animate tank direction in-place
+	 * Used for Game Over Screen
+	 */
+	method void animateRotate()
+	{
+		var int i;
+		var int offset;
+
+		let offset = x + (y * 512);
+		let i = 0;
+
+		while (i < 8) {
+			// should have considered this from the start, 
+			// and make directions work in a circular fashion (0, 1, 2, 3) vs (1, 2, 0, 3)
+
+			if (currentDirection = 0) {				// right
+				let currentDirection = 3;			// down
+			} else { if (currentDirection = 1) {	// left
+				let currentDirection = 2;			// up
+			} else { if (currentDirection = 2) {	// up
+				let currentDirection = 0;			// right
+			} else { if (currentDirection = 3) {	// down			
+				let currentDirection = 1;			// left
+			}}}}
+
+			do drawDirectionalFrame(offset);	
+			do Sys.wait(100);
+			let i = i + 1;
+		}		 
+
+		return;
 	}
 
 	/*

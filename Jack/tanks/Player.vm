@@ -32,9 +32,11 @@ push pointer 0
 push local 0
 call Player.clear 2
 pop temp 0
-push constant 0
+push constant 1
+neg
 pop this 1
-push constant 0
+push constant 1
+neg
 pop this 2
 push constant 0
 return
@@ -608,118 +610,279 @@ push local 0
 call Player.clear 2
 pop temp 0
 label IF_FALSE0
+push pointer 0
+push local 0
+call Player.drawDirectionalFrame 2
+pop temp 0
+push constant 0
+return
+function Player.drawDirectionalFrame 0
+push argument 0
+pop pointer 0
 push this 0
 push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 7
+not
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+push argument 1
+call Player.drawFrameRightNormal 2
+pop temp 0
+goto IF_END1
+label IF_FALSE1
+push pointer 0
+push argument 1
+call Player.drawFrameRightAlternative 2
+pop temp 0
+label IF_END1
+goto IF_END0
+label IF_FALSE0
+push this 0
+push constant 1
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push this 7
+not
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push pointer 0
+push argument 1
+call Player.drawFrameLeftNormal 2
+pop temp 0
+goto IF_END3
+label IF_FALSE3
+push pointer 0
+push argument 1
+call Player.drawFrameLeftAlternative 2
+pop temp 0
+label IF_END3
+goto IF_END2
+label IF_FALSE2
+push this 0
+push constant 2
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push this 7
+not
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push pointer 0
+push argument 1
+call Player.drawFrameUpNormal 2
+pop temp 0
+goto IF_END5
+label IF_FALSE5
+push pointer 0
+push argument 1
+call Player.drawFrameUpAlternative 2
+pop temp 0
+label IF_END5
+goto IF_END4
+label IF_FALSE4
+push this 0
+push constant 3
+eq
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push this 7
+not
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
+push pointer 0
+push argument 1
+call Player.drawFrameDownNormal 2
+pop temp 0
+goto IF_END7
+label IF_FALSE7
+push pointer 0
+push argument 1
+call Player.drawFrameDownAlternative 2
+pop temp 0
+label IF_END7
+label IF_FALSE6
+label IF_END4
+label IF_END2
+label IF_END0
+push this 7
+not
+pop this 7
+push constant 0
+return
+function Player.animateTo 1
+push argument 0
+pop pointer 0
+push this 1
+push this 2
+push constant 512
+call Math.multiply 2
+add
+pop local 0
+label WHILE_EXP0
+push this 1
+push argument 1
+eq
+push this 2
+and
+push argument 2
+eq
+not
+not
+if-goto WHILE_END0
+push pointer 0
+push local 0
+call Player.clear 2
+pop temp 0
+push this 1
+push argument 1
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 1
+push constant 1
+sub
+pop this 1
+goto IF_END0
+label IF_FALSE0
+push this 1
+push argument 1
+lt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 1
+push constant 1
+add
+pop this 1
+label IF_FALSE1
+label IF_END0
+push this 2
+push argument 2
+gt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push this 2
+push constant 1
+sub
+pop this 2
+goto IF_END2
+label IF_FALSE2
+push this 2
+push argument 2
+lt
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push this 2
+push constant 1
+add
+pop this 2
+label IF_FALSE3
+label IF_END2
+push this 1
+push this 2
+push constant 512
+call Math.multiply 2
+add
+pop local 0
+push pointer 0
+push local 0
+call Player.drawDirectionalFrame 2
+pop temp 0
+push constant 100
+call Sys.wait 1
+pop temp 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Player.animateRotate 2
+push argument 0
+pop pointer 0
+push this 1
+push this 2
+push constant 512
+call Math.multiply 2
+add
+pop local 1
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push constant 8
+lt
+not
+if-goto WHILE_END0
+push this 0
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 3
+pop this 0
+goto IF_END0
+label IF_FALSE0
+push this 0
+push constant 1
 eq
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
-push this 7
-not
+push constant 2
+pop this 0
+goto IF_END1
+label IF_FALSE1
+push this 0
+push constant 2
+eq
 if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
-push pointer 0
-push local 0
-call Player.drawFrameRightNormal 2
-pop temp 0
+push constant 0
+pop this 0
 goto IF_END2
 label IF_FALSE2
-push pointer 0
-push local 0
-call Player.drawFrameRightAlternative 2
-pop temp 0
-label IF_END2
-push this 7
-not
-pop this 7
-push constant 0
-return
-label IF_FALSE1
 push this 0
-push constant 1
+push constant 3
 eq
 if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
-push this 7
-not
-if-goto IF_TRUE4
-goto IF_FALSE4
-label IF_TRUE4
-push pointer 0
-push local 0
-call Player.drawFrameLeftNormal 2
-pop temp 0
-goto IF_END4
-label IF_FALSE4
-push pointer 0
-push local 0
-call Player.drawFrameLeftAlternative 2
-pop temp 0
-label IF_END4
-push this 7
-not
-pop this 7
-push constant 0
-return
+push constant 1
+pop this 0
 label IF_FALSE3
-push this 0
-push constant 2
-eq
-if-goto IF_TRUE5
-goto IF_FALSE5
-label IF_TRUE5
-push this 7
-not
-if-goto IF_TRUE6
-goto IF_FALSE6
-label IF_TRUE6
+label IF_END2
+label IF_END1
+label IF_END0
 push pointer 0
-push local 0
-call Player.drawFrameUpNormal 2
+push local 1
+call Player.drawDirectionalFrame 2
 pop temp 0
-goto IF_END6
-label IF_FALSE6
-push pointer 0
-push local 0
-call Player.drawFrameUpAlternative 2
+push constant 100
+call Sys.wait 1
 pop temp 0
-label IF_END6
-push this 7
-not
-pop this 7
-push constant 0
-return
-label IF_FALSE5
-push this 0
-push constant 3
-eq
-if-goto IF_TRUE7
-goto IF_FALSE7
-label IF_TRUE7
-push this 7
-not
-if-goto IF_TRUE8
-goto IF_FALSE8
-label IF_TRUE8
-push pointer 0
 push local 0
-call Player.drawFrameDownNormal 2
-pop temp 0
-goto IF_END8
-label IF_FALSE8
-push pointer 0
-push local 0
-call Player.drawFrameDownAlternative 2
-pop temp 0
-label IF_END8
-push this 7
-not
-pop this 7
-push constant 0
-return
-label IF_FALSE7
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
 push constant 0
 return
 function Player.drawFrameRightNormal 1

@@ -31,6 +31,13 @@ class TankGame
 	// whether it's the start of a new round
 	field boolean newRound;
 
+	// end of level
+	field boolean gameOver;
+
+	// countdown for next level load
+	field boolean countDownStarted;
+    field int countDown;
+
 	/**
 	 * Create a new tank game
 	 */
@@ -57,9 +64,6 @@ class TankGame
 	 */ 
 	method void loadLevel(int levelToLoad)
 	{
-		// clear screen entirely
-		do Screen.clearScreen();
-
 		// load level
 		do level.loadLevel(levelToLoad);
 
@@ -84,6 +88,10 @@ class TankGame
 
 		// reset players
 		do resetPlayerPositions();
+
+		// game started
+		let gameOver = false;
+		let countDownStarted = false;
 
 		return;
 	}
@@ -179,7 +187,7 @@ class TankGame
 	 */
 	method boolean decrementAndCheckMovesRemaining()
 	{
-		if (newRound) {
+		if (newRound | gameOver) {
 			return false;
 		}
 
@@ -288,12 +296,6 @@ class TankGame
 	 */
 	method void playerKilled()
 	{
-		// max 10 points per game
-		if (player2Score = 10 | player1Score = 10) {
-			// GAME OVER!
-			return;
-		}
-
 		if (player1Turn) {
 			// increment player1 score
 			let player1Score = player1Score + 1;
@@ -307,7 +309,62 @@ class TankGame
 			do player1.explode();
 		}
 
-		do resetPlayerPositions();
+		// max 10 points per game
+		if ((player2Score = 10) | (player1Score = 10)) {
+			// GAME OVER!
+			do gameOver();
+		} else {
+			// just reset for next round
+			do resetPlayerPositions();
+		}
+
+		return;
+	}
+
+	/** 
+	 * Show game over screen
+	 */
+	method void gameOver()
+	{
+		let gameOver = true;
+
+		do player1.remove();
+		do player2.remove();
+
+		do level.loadGameOver(player1Score, player2Score);
+		do Sys.wait(100);
+
+		// show animation of player killing other player
+		if (player1Score > player2Score) {
+			// player 1 top, player 2 bottom
+			do player1.setLocationAndDirection(3, 3, 0, true);
+			do player2.setLocationAndDirection(28, 12, 1, true);
+		} else {
+			// player 1 bottom, player 2 top
+			do player1.setLocationAndDirection(3, 12, 0, true);
+			do player2.setLocationAndDirection(28, 3, 1, true);
+		}
+
+		do player1.animateTo(13, 6);
+		do player2.animateTo(17, 6);
+		do Sys.wait(100);
+
+		if (player1Score > player2Score) {
+			do player2.explode();
+			do Sys.wait(100);
+			do player1.animateTo(15, 6);
+			do Sys.wait(100);
+			do player1.animateRotate();
+		} else {
+			do player1.explode();
+			do Sys.wait(100);
+			do player2.animateTo(15, 6);
+			do Sys.wait(100);
+			do player2.animateRotate();
+		}
+
+		let countDownStarted = true;
+		let countDown = 10;
 
 		return;
 	}
@@ -345,12 +402,13 @@ class TankGame
 	 */
 	method void run()
 	{
-		var boolean exit;					
+		var boolean exit;			
+		var int waiting;
 
 		// the key currently pressed by the user
 	    var char key;  						
 
-		let exit = false;				
+		let exit = false;		
 
 		// game loop
 		while (~exit) {
@@ -358,39 +416,77 @@ class TankGame
 			while (key = 0) {
 				let key = Keyboard.keyPressed();
 				do Sys.wait(10);
+
+				if (gameOver) {
+					// show count down timer while waiting for player input
+					if (countDownStarted) {
+						if (countDown = 10) {
+							// only need to output this when it just started
+							do Output.moveCursor(19, 6);
+							do Main.printString("[Q]uit [P]revious level [N]ext level [R]estart level");
+						}
+
+						let countDown = countDown - 1;
+
+						// show countdown timer
+						do Output.moveCursor(13, 21);
+						do Main.printString("Loading next level in");
+						do Output.moveCursor(16, 31);
+						do Output.printInt(countDown);
+
+						// split wait into pieces so we can capture keypress during countdown
+						let waiting = 0;
+
+						while ((waiting < 100) & (key = 0)) {
+							do Sys.wait(10);
+							let key = Keyboard.keyPressed();
+							let waiting = waiting + 1;
+						}
+
+						if (countDown = 0) {
+							// countdown reached zero, with no input
+							let countDownStarted = false;
+
+							// start next level
+							do loadLevel(level.getCurrentLevel() + 1);	
+						}
+					}		
+				}		
 			}
 
 			if (key = 81) { 								// Q key
 				let exit = true; 
-			} else { if (key = 90) {						// Z key
-				// load last level
+			} else { if (key = 80) {						// P key
+				// load previous level
 				do loadLevel(level.getCurrentLevel() - 1);	
-			} else { if (key = 88) {						// X key
+			} else { if (key = 78) {						// N key
 				// load next level
 				do loadLevel(level.getCurrentLevel() + 1);	
 			} else  { if (key = 82) {						// R key
 				// load main menu
-				do loadLevel(0);	 
+				do loadLevel(level.getCurrentLevel());			 
 			} else { 
-				// check if player is currently in a turn
-				if (~playerTurnWaiting) {
-					// pass key through to player objects
-					let newRound = false;
+				if (~gameOver) {
+					// check if player is currently in a turn
+					if (~playerTurnWaiting) {
+						// pass key through to player objects
+						let newRound = false;
 
-					if (player1Turn) {
-						do player1.keyPressed(key);
+						if (player1Turn) {
+							do player1.keyPressed(key);
+						} else {
+							do player2.keyPressed(key);
+						} 
+
+						// check whether player has moves still this turn
+						do decrementAndCheckMovesRemaining();
 					} else {
-						do player2.keyPressed(key);
-					} 
-
-					// check whether player has moves still this turn
-					do decrementAndCheckMovesRemaining();
-				} else {
-					// check that next player acknowledges turn
-					if (key = 128) {
-						do nextTurn();
-					}
-				}				
+						// check that next player acknowledges turn
+						if (key = 128) {
+							do nextTurn();
+						}
+					}				
+				}
 			}}}
 
 			// key debounce.

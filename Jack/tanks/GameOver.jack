@@ -1,0 +1,81 @@
+/**
+ * GameOver layout
+ */
+class GameOver
+{
+	field Array levelDefinition;
+
+	constructor GameOver new(int levelDefinitionPointer, int player1Score, int player2Score)
+	{
+		// general iterator
+		var int i;		
+
+		let levelDefinition = levelDefinitionPointer;
+
+		// Level:
+		// 0 = empty, 1 = concrete, 2 = steel, x = player1 start, y = player2 start, 
+		// top two rows are typically for header (set in level.jack)
+		// sprite offset on screen = col + (row * 512)
+		// 
+		// 0 -  22222222222222222222222222222222	levelDefinition[0-31]
+		// 1 -  20000000000000000000000000000002 	levelDefinition[32-63]		
+		// 2 -  20000000000000000000000000000002	levelDefinition[64-95]
+		// 3 -  20000000000000000000000000000002	levelDefinition[96-127]
+		// 4 -  20000000000000000000000000000002	levelDefinition[128-159]
+		// 5 -  20000000000000000000000000000002	levelDefinition[160-191]
+		// 6 -  20000000000000000000000000000002	levelDefinition[192-223]
+		// 7 -  20000000000000000000000000000002	levelDefinition[224-255]
+		// 8 -  20000000x00000000000000y00000002	levelDefinition[256-287]
+		// 9 -  20000000000000000000000000000002	levelDefinition[288-319]
+		// 10 - 20000000000000000000000000000002	levelDefinition[320-351]
+		// 11 - 20000000000000000000000000000002	levelDefinition[352-382]
+		// 12 - 20000000000000000000000000000002	levelDefinition[384-415]
+		// 13 - 20000000000000000000000000000002	levelDefinition[416-447]
+		// 14 - 20000000000000000000000000000002	levelDefinition[448-479]
+		// 15 - 22222222222222222222222222222222	levelDefinition[480-511]
+		// 
+
+		// *******************************
+		// Draw Stage
+		// *******************************
+		// build row 0 + 15 (top + bottom walls)
+		while (i < 32) {
+			// row 0
+			let levelDefinition[Level.getSpriteIndex(i, 0)] = LevelSprite.newSteelWall(i, 0);
+
+			// row 15
+			let levelDefinition[Level.getSpriteIndex(i, 15)] = LevelSprite.newSteelWall(i, 15);
+			let i = i + 1;
+		}
+
+		// row 1 - 14, columns 0 + 31
+		let i = 1;
+		while (i < 15) {
+			// left + right walls
+			let levelDefinition[Level.getSpriteIndex(0, i)] = LevelSprite.newSteelWall(0, i);
+			let levelDefinition[Level.getSpriteIndex(31, i)] = LevelSprite.newSteelWall(31, i);
+
+			let i = i + 1;
+		}
+
+		do Output.moveCursor(3, 26);
+		do Main.printString("GAME OVER!");
+		do Output.moveCursor(5, 24);
+
+		if (player1Score > player2Score) {
+			// player 1 wins
+			do Main.printString("Player 1 Wins!");
+		} else {
+			// player 2 wins
+			do Main.printString("Player 2 Wins!");
+		}
+
+		return this;
+	} 		
+
+	method void dispose()
+	{
+		do Memory.deAlloc(this);
+		return;
+	}
+}

@@ -290,7 +290,7 @@ return
 function Level3.getMovesPerTurn 0
 push argument 0
 pop pointer 0
-push constant 15
+push constant 12
 return
 function Level3.getPlayer1StartDirection 0
 push argument 0

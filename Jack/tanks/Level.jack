@@ -106,6 +106,14 @@ class Level
 		return;
 	}
 
+	/*
+	 * max number of levels currently supported
+	 */
+	method int getMaxLevels()
+	{
+		return 5;
+	}
+
 	/**
 	 * Return the current level
 	 */

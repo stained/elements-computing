@@ -271,6 +271,11 @@ goto WHILE_EXP0
 label WHILE_END0
 push constant 0
 return
+function Level.getMaxLevels 0
+push argument 0
+pop pointer 0
+push constant 5
+return
 function Level.getCurrentLevel 0
 push argument 0
 pop pointer 0

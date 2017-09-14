@@ -18,3 +18,16 @@ call String.dispose 1
 pop temp 0
 push constant 0
 return
+function Main.wait 0
+push static 0
+push argument 0
+add
+pop static 0
+push argument 0
+call Sys.wait 1
+pop temp 0
+push constant 0
+return
+function Main.getWaitTime 0
+push static 0
+return

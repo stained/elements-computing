@@ -1,7 +1,7 @@
 /**
- * Tiny Turn-based Tanks
- * A game that [very] loosely resembles the tank stages from the 1977 Atari classic: Combat.
- *
+ * Tiny Tactical Tanks
+ * A game demo that [very] loosely resembles the tank stages from the 1977 Atari classic: Combat.
+ * 
  * Created for Nand2Tetris Part 2 on Coursera
  * By Theo Ireton (2017)
  *
@@ -9,6 +9,11 @@
  */
 class Main
 {
+	// keep track of app wait time (how much time spent waiting) in milliseconds
+	// for use as a seed in the PRNG
+	// note that at some point the waitTime will overflow, but we use the abs value in PRNG
+	static int waitTime;
+
 	/**
 	 * Entry point
 	 */ 
@@ -35,5 +40,24 @@ class Main
 		do Output.printString(str);
 		do str.dispose();
 		return;
+	}
+
+	/**
+	 * Custom Sys.wait equivalent function that increments wait time by "time"
+	 */
+	function void wait(int time)
+	{
+		// increment run time
+		let waitTime = waitTime + time;
+		do Sys.wait(time);
+		return;
+	}	
+
+	/**
+	 * Get current wait time
+	 */
+	function int getWaitTime()
+	{
+		return waitTime;
 	}
 }

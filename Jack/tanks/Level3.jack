@@ -121,7 +121,7 @@ class Level3
 	 */
 	method int getMovesPerTurn()
 	{
-		return 15;
+		return 12;
 	}
 
 	/**

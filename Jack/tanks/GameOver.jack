@@ -10,6 +10,8 @@ class GameOver
 		// general iterator
 		var int i;		
 
+		// used in offset calculation
+
 		let levelDefinition = levelDefinitionPointer;
 
 		// Level:
@@ -69,6 +71,16 @@ class GameOver
 			// player 2 wins
 			do Main.printString("Player 2 Wins!");
 		}
+
+		// for the fun of it, invert color of "Game Over" text
+		// (x + (row * 512) + text_align_offset)
+		do LevelSprite.invertColor(12 + 960);
+		do LevelSprite.invertColor(13 + 960);
+		do LevelSprite.invertColor(14 + 960);
+		do LevelSprite.invertColor(15 + 960);
+		do LevelSprite.invertColor(16 + 960);
+		do LevelSprite.invertColor(17 + 960);
+		do LevelSprite.invertColor(18 + 960);
 
 		return this;
 	} 		

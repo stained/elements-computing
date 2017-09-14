@@ -1,0 +1,53 @@
+/**
+ * Some additional math utilities
+ */
+class TankMath
+{
+	/**
+	 * Naive implementation of modulo
+	 */
+	function int mod(int x, int y)
+	{
+		var int result;
+
+		// ensure inputs are positive
+		let x = TankMath.abs(x);
+		let y = TankMath.abs(y);
+		let result = x;
+
+		while ((result > y) | (result = y)) {
+			let result = result - y;
+		}
+
+		return result;
+	}
+
+	/**
+	 * simple abs function
+	 */
+	function int abs(int value)
+	{
+		if (value < 0) {
+			return -value;
+		}
+
+		return value;
+	}
+
+	/**
+	 * Very simple pseudo random number generation
+	 * Return random number between start and end, inclusive
+	 */
+	function int random(int seed, int start, int end)
+	{
+		let seed = TankMath.abs(seed);
+		let end = end + 1;
+
+		if (~(start = 0)) {
+			return TankMath.mod((seed * start), end) + start;
+		} else {
+			return TankMath.mod(seed, end);
+		}
+
+	}
+}

@@ -449,6 +449,173 @@ call Memory.poke 2
 pop temp 0
 push constant 0
 return
+function LevelSprite.invertColor 1
+push constant 16384
+push argument 0
+add
+pop local 0
+push local 0
+push constant 0
+add
+push local 0
+push constant 0
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 32
+add
+push local 0
+push constant 32
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 64
+add
+push local 0
+push constant 64
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 96
+add
+push local 0
+push constant 96
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 128
+add
+push local 0
+push constant 128
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 160
+add
+push local 0
+push constant 160
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 192
+add
+push local 0
+push constant 192
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 224
+add
+push local 0
+push constant 224
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 256
+add
+push local 0
+push constant 256
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 288
+add
+push local 0
+push constant 288
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 320
+add
+push local 0
+push constant 320
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 352
+add
+push local 0
+push constant 352
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 384
+add
+push local 0
+push constant 384
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 416
+add
+push local 0
+push constant 416
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 448
+add
+push local 0
+push constant 448
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 480
+add
+push local 0
+push constant 480
+add
+call Memory.peek 1
+not
+call Memory.poke 2
+pop temp 0
+push constant 0
+return
 function LevelSprite.drawPlayer1Icon 1
 push argument 0
 pop pointer 0

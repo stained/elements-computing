@@ -207,7 +207,7 @@ class Player
 
 			let offset = bulletX + (bulletY * 512);
 			do drawBulletFrame(offset);
-			do Sys.wait(30);
+			do Main.wait(30);
 			do clear(offset);
 		}
 
@@ -222,9 +222,9 @@ class Player
 		var int offset;
 		let offset = bulletX + (bulletY * 512);
 		do drawExplosionFrame2(offset, false);
-		do Sys.wait(30);
+		do Main.wait(30);
 		do drawExplosionFrame1(offset, false);
-		do Sys.wait(30);
+		do Main.wait(30);
 		do clear(offset);
 		return;
 	}
@@ -237,11 +237,11 @@ class Player
 		var int offset;
 		let offset = bulletX + (bulletY * 512);
 		do drawExplosionFrame2(offset, true);
-		do Sys.wait(30);
+		do Main.wait(30);
 		do drawExplosionFrame1(offset, true);
-		do Sys.wait(30);
+		do Main.wait(30);
 		do drawExplosionFrame0(offset, true);
-		do Sys.wait(30);
+		do Main.wait(30);
 		do clear(offset);
 		return;
 	}
@@ -261,13 +261,13 @@ class Player
 		var int offset;
 		let offset = x + (y * 512);
 		do drawExplosionFrame0(offset, false);
-		do Sys.wait(60);
+		do Main.wait(60);
 		do drawExplosionFrame1(offset, false);
-		do Sys.wait(60);
+		do Main.wait(60);
 		do clear(offset);
-		do Sys.wait(60);
+		do Main.wait(60);
 		do draw();
-		do Sys.wait(400);
+		do Main.wait(400);
 
 		return;
 	}
@@ -433,7 +433,7 @@ class Player
 			// change direction if necessary
 			if (~(lastDirection = currentDirection)) {
 				do drawDirectionalFrame(offset);
-				do Sys.wait(100);	
+				do Main.wait(100);	
 			}
 
 			// clear last position
@@ -443,7 +443,7 @@ class Player
 			let offset = x + (y * 512);
 
 			do drawDirectionalFrame(offset);	
-			do Sys.wait(100);
+			do Main.wait(100);
 		}
 
 		return;

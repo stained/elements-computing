@@ -168,6 +168,29 @@ class LevelSprite
 		return;
 	}	
 
+	function void invertColor(int location)
+	{
+		var int memAddress; 
+		let memAddress = 16384+location;
+		do Memory.poke(memAddress+0, ~(Memory.peek(memAddress+0)));
+		do Memory.poke(memAddress+32, ~(Memory.peek(memAddress+32)));
+		do Memory.poke(memAddress+64, ~(Memory.peek(memAddress+64)));
+		do Memory.poke(memAddress+96, ~(Memory.peek(memAddress+96)));
+		do Memory.poke(memAddress+128, ~(Memory.peek(memAddress+128)));
+		do Memory.poke(memAddress+160, ~(Memory.peek(memAddress+160)));
+		do Memory.poke(memAddress+192, ~(Memory.peek(memAddress+192)));
+		do Memory.poke(memAddress+224, ~(Memory.peek(memAddress+224)));
+		do Memory.poke(memAddress+256, ~(Memory.peek(memAddress+256)));
+		do Memory.poke(memAddress+288, ~(Memory.peek(memAddress+288)));
+		do Memory.poke(memAddress+320, ~(Memory.peek(memAddress+320)));
+		do Memory.poke(memAddress+352, ~(Memory.peek(memAddress+352)));
+		do Memory.poke(memAddress+384, ~(Memory.peek(memAddress+384)));
+		do Memory.poke(memAddress+416, ~(Memory.peek(memAddress+416)));
+		do Memory.poke(memAddress+448, ~(Memory.peek(memAddress+448)));
+		do Memory.poke(memAddress+480, ~(Memory.peek(memAddress+480)));
+		return;
+	}
+
 	method void drawPlayer1Icon(int location) {
 		var int memAddress; 
 		// offset by 256 to align with score text

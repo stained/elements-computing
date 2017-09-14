@@ -1,0 +1,70 @@
+function TankMath.mod 1
+push argument 0
+call TankMath.abs 1
+pop argument 0
+push argument 1
+call TankMath.abs 1
+pop argument 1
+push argument 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push argument 1
+gt
+push local 0
+push argument 1
+eq
+or
+not
+if-goto WHILE_END0
+push local 0
+push argument 1
+sub
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push local 0
+return
+function TankMath.abs 0
+push argument 0
+push constant 0
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 0
+neg
+return
+label IF_FALSE0
+push argument 0
+return
+function TankMath.random 0
+push argument 0
+call TankMath.abs 1
+pop argument 0
+push argument 2
+push constant 1
+add
+pop argument 2
+push argument 1
+push constant 0
+eq
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 0
+push argument 1
+call Math.multiply 2
+push argument 2
+call TankMath.mod 2
+push argument 1
+add
+return
+goto IF_END0
+label IF_FALSE0
+push argument 0
+push argument 2
+call TankMath.mod 2
+return
+label IF_END0

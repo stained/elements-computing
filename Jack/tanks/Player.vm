@@ -303,7 +303,7 @@ push local 2
 call Player.drawBulletFrame 2
 pop temp 0
 push constant 30
-call Sys.wait 1
+call Main.wait 1
 pop temp 0
 push pointer 0
 push local 2
@@ -328,7 +328,7 @@ push constant 0
 call Player.drawExplosionFrame2 3
 pop temp 0
 push constant 30
-call Sys.wait 1
+call Main.wait 1
 pop temp 0
 push pointer 0
 push local 0
@@ -336,7 +336,7 @@ push constant 0
 call Player.drawExplosionFrame1 3
 pop temp 0
 push constant 30
-call Sys.wait 1
+call Main.wait 1
 pop temp 0
 push pointer 0
 push local 0
@@ -360,7 +360,7 @@ not
 call Player.drawExplosionFrame2 3
 pop temp 0
 push constant 30
-call Sys.wait 1
+call Main.wait 1
 pop temp 0
 push pointer 0
 push local 0
@@ -369,7 +369,7 @@ not
 call Player.drawExplosionFrame1 3
 pop temp 0
 push constant 30
-call Sys.wait 1
+call Main.wait 1
 pop temp 0
 push pointer 0
 push local 0
@@ -378,7 +378,7 @@ not
 call Player.drawExplosionFrame0 3
 pop temp 0
 push constant 30
-call Sys.wait 1
+call Main.wait 1
 pop temp 0
 push pointer 0
 push local 0
@@ -411,7 +411,7 @@ push constant 0
 call Player.drawExplosionFrame0 3
 pop temp 0
 push constant 60
-call Sys.wait 1
+call Main.wait 1
 pop temp 0
 push pointer 0
 push local 0
@@ -419,20 +419,20 @@ push constant 0
 call Player.drawExplosionFrame1 3
 pop temp 0
 push constant 60
-call Sys.wait 1
+call Main.wait 1
 pop temp 0
 push pointer 0
 push local 0
 call Player.clear 2
 pop temp 0
 push constant 60
-call Sys.wait 1
+call Main.wait 1
 pop temp 0
 push pointer 0
 call Player.draw 1
 pop temp 0
 push constant 400
-call Sys.wait 1
+call Main.wait 1
 pop temp 0
 push constant 0
 return
@@ -826,7 +826,7 @@ push local 0
 call Player.drawDirectionalFrame 2
 pop temp 0
 push constant 100
-call Sys.wait 1
+call Main.wait 1
 pop temp 0
 label IF_FALSE6
 push pointer 0
@@ -844,7 +844,7 @@ push local 0
 call Player.drawDirectionalFrame 2
 pop temp 0
 push constant 100
-call Sys.wait 1
+call Main.wait 1
 pop temp 0
 goto WHILE_EXP0
 label WHILE_END0

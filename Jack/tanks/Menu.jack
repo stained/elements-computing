@@ -56,8 +56,8 @@ class Menu
 		// instructions
 		do Output.moveCursor(21, 13);
 		do Main.printString("[cursor keys] to move, [space] to shoot");
-		do Output.moveCursor(22, 5);
-		do Main.printString("[Q]uit [P]revious level [N]ext level [R]estart level");
+		do Output.moveCursor(22, 10);
+		do Main.printString("[Q]uit [P]revious [N]ext [R]estart [U]nknown ");
 
 		return this;
 	}

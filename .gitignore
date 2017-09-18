@@ -3,3 +3,5 @@
 /HDL/.DS_Store
 .DS_Store
 /VMTranslator/.DS_Store
+/Compiler/__pycache__
+/Compiler/.idea

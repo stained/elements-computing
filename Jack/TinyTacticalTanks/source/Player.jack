@@ -54,7 +54,7 @@ class Player
 		let offset = x + (y * 512);
 		do clear(offset);
 
-		// move it to 0,0 (out of game area)
+		// move it to -1,-1 (out of game area)
 		let x = -1;
 		let y = -1;
 		return;

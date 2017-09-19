@@ -1,5 +1,6 @@
 from Token import Token
 
+
 class JackTokenizer:
     # different types of tokens
     TOKEN_TYPE_KEYWORD = 'keyword'
@@ -61,7 +62,7 @@ class JackTokenizer:
                 self.commit_token(self.tokenString, self.currentTokenType)
 
             # it's a symbol!
-            # commit, replacing symbol with representation
+            # commit, replacing symbol with xml representation
             self.commit_token(JackTokenizer.symbols[character], JackTokenizer.TOKEN_TYPE_SYMBOL)
             return
 
@@ -110,7 +111,6 @@ class JackTokenizer:
 
     def has_more_tokens(self):
         return self.tokenIndex < len(self.tokens)
-
 
     def __init__(self, jackFilePath):
         self.jackFilePath = jackFilePath

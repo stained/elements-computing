@@ -1,7 +1,7 @@
 import os
 import sys
 from JackTokenizer import JackTokenizer
-
+from CompilationEngine import CompilationEngine
 
 if __name__ == "__main__":
     jackFiles = []
@@ -19,9 +19,6 @@ if __name__ == "__main__":
         writeInit = True
         folderName = os.path.basename(filePath)
 
-        # folder passed in
-        outputFilename = filePath + "/" + folderName + ".xml"
-
         for root, dirs, files in os.walk(completePath):
             path = root.split(os.sep)
             for file in files:
@@ -36,17 +33,11 @@ if __name__ == "__main__":
 
     if len(jackFiles) > 0:
         for filePath in jackFiles:
-            outputFilename = filePath.replace(".jack", ".xml")
-            outFile = open(outputFilename, 'w')
-
+            # tokenize
             tokenizer = JackTokenizer(filePath)
-            outFile.write('<tokens>\n')
 
-            while tokenizer.has_more_tokens():
-                token = tokenizer.advance()
-                outFile.write('<' + token.type + '>' + token.value + '</' + token.type + '>\n')
-
-            outFile.write('</tokens>\n')
-            outFile.close()
+            # compile
+            outputFilename = filePath.replace(".jack", ".tok.xml")
+            CompilationEngine(tokenizer, outputFilename)
 
 

@@ -37,7 +37,7 @@ if __name__ == "__main__":
             tokenizer = JackTokenizer(filePath)
 
             # compile
-            outputFilename = filePath.replace(".jack", ".tok.xml")
+            outputFilename = filePath.replace(".jack", ".xml")
             CompilationEngine(tokenizer, outputFilename)
 
 

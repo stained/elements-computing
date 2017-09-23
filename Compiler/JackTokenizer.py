@@ -105,12 +105,21 @@ class JackTokenizer:
         return
 
     def advance(self):
-        token = self.tokens[self.tokenIndex]
         self.tokenIndex += 1
+        token = self.tokens[self.tokenIndex]
         return token
+
+    def get_current_token(self):
+        return self.tokens[self.tokenIndex]
 
     def has_more_tokens(self):
         return self.tokenIndex < len(self.tokens)
+
+    def look_ahead(self, distance):
+        if len(self.tokens) <= self.tokenIndex + distance:
+            return False
+
+        return self.tokens[self.tokenIndex + distance]
 
     def __init__(self, jackFilePath):
         self.jackFilePath = jackFilePath
